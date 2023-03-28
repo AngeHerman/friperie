@@ -1,11 +1,9 @@
-// const express = require('express');
-import express from 'express';
+const express = require('express');
 const server = express();
 server.use(express.static('public'));
 server.set('view engine','ejs');
 server.use(express.urlencoded({extended: true}));
-import * as db from './database.js';
-// db = require("./database.js");
+const db = require("./database.js");
 
 
 

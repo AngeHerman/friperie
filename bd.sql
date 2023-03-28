@@ -1,3 +1,6 @@
+drop database if exists friperie;
+CREATE DATABASE friperie;
+\connect friperie;
 drop table if exists cat_prod cascade;
 drop table if exists scat_prod cascade;
 drop table if exists taille cascade;
