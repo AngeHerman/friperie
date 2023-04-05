@@ -1,0 +1,5 @@
+cat postgresql.conf | grep host
+\conninfo
+
+\connect postgres
+\password <username>
