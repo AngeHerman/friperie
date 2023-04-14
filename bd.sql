@@ -112,15 +112,27 @@ CREATE TABLE client_comm(
 
 -- Insertion des categories
 INSERT INTO cat_prod values
-('Pantallon'),
+('Pantalon'),
 ('Chemise'),
-('Short');
+('Short'),
+('Sac'),
+('Jupe'),
+('Robe'),
+('Veste'),
+('Pull'),
+('T-shirt'),
+('Manteau');
 
 -- Insertion des sous categories
 INSERT INTO scat_prod values
-('Jean','Pantallon'),
-('Tee-shirt','Chemise'),
-('Short de sport','Short');
+('Jean','Pantalon'),
+('Jogging','Pantalon'),
+('Short de sport','Short'),
+('Jupe courte','Jupe'),
+('Jupe longue','Jupe'),
+('Veste','Chemise'),
+('Sac à main','Sac');
+
 
 -- Insertion des tailles
 INSERT INTO taille values
@@ -134,14 +146,49 @@ INSERT INTO taille values
 
 -- Insertion des produits
 INSERT INTO produit(libelle,qte,nom_scat,img) values
-('Jean denim coupe normale',15,'Jean','jean_denim_coupe_normal'),
-('short de sport nike',12,'Short de sport','short_sport_nike.jpeg');
+('Jean denim coupe normale',15,'Jean','jean_denim_coupe_normal.jpeg'),
+('Short de sport Nike',12,'Short de sport','short_sport_nike.jpeg'),
+('Jogging Nike',13,'Jogging','joggings_nike.jpeg'),
+('Jean Levis',14,'Jean','jean_levis.jpeg'),
+('Jupe courte cache cache',12,'Jupe courte','jupe_courte_cachecache.jpeg'),
+('Jupe longue together',12,'Jupe longue','jupe_longue_together.jpeg'),
+('Pull Only',14,'Pull','pull_only.jpeg'),
+('Veste Adidas',13,'Veste','veste_adidas.jpeg'),
+('Manteau Napapijri',11,'Manteau','manteau_napapijri.jpeg'),
+('Veste de costume Daniel Hechter',7,'Veste de costume','veste_costume_daniel_hechter.jpeg'),
+('Sac à main Lilith',9,'Sac à main','sac_main_lilith.jpeg'),
+('Robe courte Superdry',4,'Robe courte','robe_courte_superdry.jpeg');
 
 -- Insertion des qte de tailles pour chaque produit
 INSERT INTO taille_prod values
-('S',1,15) -- Le produit 1 (jean denim) a 15 quantité de taille S
-('M',1,25); -- Le produit 1 (jean denim) a 25 quantité de taille M
-
-
-
+('S',1,13), -- Le produit 1 (jean denim) a 13 quantité de taille S
+('M',1,2), -- Le produit 1 (jean denim) a 2 quantité de taille M
+('XS',2,4),
+('S',2,6),
+('M',2,3),
+('S',3,4),
+('M',3,9),
+('L',3,2),
+('S',4,6),
+('M',4,7),
+('L',4,2),
+('S',5,8),
+('M',5,7),
+('S',6,4),
+('M',6,7), 
+('S',7,5),
+('M',7,7),
+('L',7,6),
+('M',8,7),
+('L',8,7),
+('S',9,4),
+('M',9,3),
+('M',10,3),
+('L',10,2), 
+('S',11,4),
+('M',11,5),
+('L',11,5),
+('M',12,13),
+('M',13,4),
+('L',13,6); 
 
