@@ -2,6 +2,7 @@
 drop table if exists cat_prod cascade;
 drop table if exists scat_prod cascade;
 drop table if exists taille cascade;
+drop table if exists taille_prod cascade;
 drop table if exists produit cascade;
 drop table if exists accessoire cascade;
 drop table if exists prod_acc cascade;
@@ -34,14 +35,13 @@ CREATE TABLE produit(
     qte int,
     nom_scat VARCHAR(30),
     img VARCHAR(100),
-    FOREIGN KEY (taille) REFERENCES taille(taille),
     FOREIGN KEY (nom_scat) REFERENCES scat_prod(nom_scat)
 );
 
 CREATE TABLE taille_prod(
     taille VARCHAR(5),
     id_prod int,
-    int qte,
+    qte int,
     FOREIGN KEY (taille) REFERENCES taille(taille),
     FOREIGN KEY (id_prod) REFERENCES produit(id_prod),
     PRIMARY KEY (id_prod,taille)
@@ -118,10 +118,7 @@ INSERT INTO cat_prod values
 ('Sac'),
 ('Jupe'),
 ('Robe'),
-('Veste'),
-('Pull'),
-('T-shirt'),
-('Manteau');
+('Veste');
 
 -- Insertion des sous categories
 INSERT INTO scat_prod values
@@ -131,7 +128,12 @@ INSERT INTO scat_prod values
 ('Jupe courte','Jupe'),
 ('Jupe longue','Jupe'),
 ('Veste','Chemise'),
-('Sac à main','Sac');
+('Sac à main','Sac'),
+('Pull','Chemise'),
+('T_shirt','Chemise'),
+('Manteau','Chemise'),
+('Costume','Chemise'),
+('Robe courte','Robe');
 
 
 -- Insertion des tailles
@@ -155,12 +157,12 @@ INSERT INTO produit(libelle,qte,nom_scat,img) values
 ('Pull Only',14,'Pull','pull_only.jpeg'),
 ('Veste Adidas',13,'Veste','veste_adidas.jpeg'),
 ('Manteau Napapijri',11,'Manteau','manteau_napapijri.jpeg'),
-('Veste de costume Daniel Hechter',7,'Veste de costume','veste_costume_daniel_hechter.jpeg'),
+('Veste de costume Daniel Hechter',7,'Costume','veste_costume_daniel_hechter.jpeg'),
 ('Sac à main Lilith',9,'Sac à main','sac_main_lilith.jpeg'),
 ('Robe courte Superdry',4,'Robe courte','robe_courte_superdry.jpeg');
 
 -- Insertion des qte de tailles pour chaque produit
-INSERT INTO taille_prod values
+INSERT INTO taille_prod(taille,id_prod,qte) values
 ('S',1,13), -- Le produit 1 (jean denim) a 13 quantité de taille S
 ('M',1,2), -- Le produit 1 (jean denim) a 2 quantité de taille M
 ('XS',2,4),
@@ -188,7 +190,5 @@ INSERT INTO taille_prod values
 ('S',11,4),
 ('M',11,5),
 ('L',11,5),
-('M',12,13),
-('M',13,4),
-('L',13,6); 
+('M',12,13);
 
