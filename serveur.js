@@ -4,14 +4,18 @@ server.use(express.static('public'));
 server.set('view engine','ejs');
 server.use(express.urlencoded({extended: true}));
 const db = require("./database.js");
+const request = require("./request.js");
+
 
 
 
 
 server.get('/',(req,res) =>{
     db.hello("Toto");
+    let produits = request.getProduits();
     res.render('client/welcome.ejs',{
         message : 'Bienvenue',
+        produits : produits
     });
 
 });
