@@ -1,50 +1,39 @@
 <div id="cards_landscape_wrap-2">
     <div class="row">
-        <!-- @foreach ($produits as $produit) -->
-        <a href="{{ route('produit.show',$produit)}}" class="">
+        <% for(var i=0; i<produits.length; i++) {%>
+        <a href="" class="">
 
         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 my-2">
                 <div class="card h-100 shadow" style="margin-bottom: 20px; height: auto;">
-                    <img src="/img/jean_denim_coupe_normal.jpeg" alt=""
+                    <img src="/img/<%= produits[i].img %>" alt=""
                     class="card-img-top mx-auto"
                     style="height: 150px; width: 250px;display: block;"
                     >
                     <div class="card-body">
-                        <a href=""><h6 class="card-title">libelle</h6></a>
-                        <!-- @if($produit->promotion == 0) -->
-                        <p>Prix : </p>
-                        <!-- {{-- @while( $a < Str::length($produit->description))
-                            @if($produit->description[$a] == ',')
-                            <br/>
-                            @else
-                            {{$produit->description[$a]}}
-                            @endif
-                            $a +=1
-                        @endwhile --}} -->
-                        <form action="{{ route('cart.store') }}" method="POST">
-                            <input type="hidden" value="{{ $produit->id }}" name="id">
-                            <input type="hidden" value="{{ $produit->libelle }}" id="name" name="name">
-                            <input type="hidden" value="{{ $produit->prix }}" id="price" name="price">
-                            <input type="hidden" value="{{ $produit->image }}" id="img" name="img">
-                            <input type="hidden" value="{{ $pro->slug }}" id="slug" name="slug">
-                            <input type="hidden" value="1"  name="quantity">
+                        <a href=""><h6 class="card-title"><%= produits[i].libelle %></h6></a>
+                        <p>Prix : <%= produits[i].prix %></p>
+                        <p>categorie : <%= produits[i].categorie %></p>
+                        <p>Id : <%= produits[i].id %></p>
+
+                        <form action="http://localhost:8080/add_cart" method="POST">
+                            <input type="hidden" value="<%= produits[i].id %>" name="id">
+                            <input type="hidden" value="<%= produits[i].libelle %>" id="libelle" name="libelle">
+                            <input type="hidden" value="<%= produits[i].prix %>" id="price" name="prix">
+                            <input type="hidden" value="<%= produits[i].img %>" id="img" name="img">
+                            <input type="hidden" value="<%= produits[i].categorie %>" id="slug" name="categorie">
+                            <!-- <input type="hidden" value="1"  name="quantity">
+                            <input type="hidden" value="L"  name="taille"> -->
                             <div class="card-footer h-25" style="background-color: white;">
                                 <div class="row">
                                     <div class="col">
                                     <!-- @if(\Cart::getTotalQuantity()<$max_panier) -->
                                     <button class="btn btn-secondary btn-sm" class="tooltip-test" title="add to cart" type ="submit">
                                         <i class="fa fa-shopping-cart"></i> ajouter au panier
-                                        qte total cart
                                     </button>
-                                    <!-- @else -->
-                                    <a class="btn btn-danger btn-sm" class="tooltip-test" title="add to cart" type ="">
-                                        <i class="fa fa-shopping-cart"></i> panier plein
-                                    </a>
-                                    <!-- @endif -->
                                     </div>
                                     <div class="col">
-                                        <select class="form-control" name="quantity" >
-                                            <option value="1">1</option>
+                                        <select class="form-control" name="qte" >
+                                            <option value="1" selected="selected" >1</option>
                                             <option value="2">2</option>
                                             <option value="3">3</option>
                                             <option value="4">4</option>
@@ -53,15 +42,27 @@
 
                                         </select>
                                     </div>
+                                    <div class="col">
+                                        <select class="form-control" name="taille" >
+                                            <option value="XL">XL</option>
+                                            <option value="L" selected="selected" >L</option>
+                                            <option value="M">M</option>
+                                            <option value="S">S</option>
+                                            <option value="XS">XS</option>
+                                            <option value="XXS">XXS</option>
+
+                                        </select>
+                                    </div>
 
                                 </div>
                             </div>
 
                         </form>
-                        <a href="{{ route('produit.show',$produit)}}" class="btn btn-outline-primary"><i class="far fa-eye"></i></a>
+                        <a href="" class="btn btn-outline-primary"><i class="far fa-eye"></i></a>
                     </div>
                 </div>
             </div>
         </a>
+        <% } %>
     </div>
 </div>

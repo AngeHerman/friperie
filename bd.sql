@@ -33,6 +33,7 @@ CREATE TABLE produit(
     id_prod serial PRIMARY KEY,
     libelle VARCHAR(60),
     qte int,
+    prix DECIMAL(10,2),
     nom_scat VARCHAR(30),
     img VARCHAR(100),
     FOREIGN KEY (nom_scat) REFERENCES scat_prod(nom_scat)
@@ -147,19 +148,19 @@ INSERT INTO taille values
 ('XXL');
 
 -- Insertion des produits
-INSERT INTO produit(libelle,qte,nom_scat,img) values
-('Jean denim coupe normale',15,'Jean','jean_denim_coupe_normal.jpeg'),
-('Short de sport Nike',12,'Short de sport','short_sport_nike.jpeg'),
-('Jogging Nike',13,'Jogging','joggings_nike.jpeg'),
-('Jean Levis',14,'Jean','jean_levis.jpeg'),
-('Jupe courte cache cache',12,'Jupe courte','jupe_courte_cachecache.jpeg'),
-('Jupe longue together',12,'Jupe longue','jupe_longue_together.jpeg'),
-('Pull Only',14,'Pull','pull_only.jpeg'),
-('Veste Adidas',13,'Veste','veste_adidas.jpeg'),
-('Manteau Napapijri',11,'Manteau','manteau_napapijri.jpeg'),
-('Veste de costume Daniel Hechter',7,'Costume','veste_costume_daniel_hechter.jpeg'),
-('Sac à main Lilith',9,'Sac à main','sac_main_lilith.jpeg'),
-('Robe courte Superdry',4,'Robe courte','robe_courte_superdry.jpeg');
+INSERT INTO produit(libelle,qte, prix,nom_scat,img) values
+('Jean denim coupe normale',15,25.5,'Jean','jean_denim_coupe_normal.jpeg'),
+('Short de sport Nike',12,40,'Short de sport','short_sport_nike.jpeg'),
+('Jogging Nike',13,70,'Jogging','joggings_nike.jpeg'),
+('Jean Levis',14,120,'Jean','jean_levis.jpeg'),
+('Jupe courte cache cache',12,15,'Jupe courte','jupe_courte_cachecache.jpeg'),
+('Jupe longue together',12,6,'Jupe longue','jupe_longue_together.jpeg'),
+('Pull Only',14,19.99,'Pull','pull_only.jpeg'),
+('Veste Adidas',13,85.99,'Veste','veste_adidas.jpeg'),
+('Manteau Napapijri',11,35,'Manteau','manteau_napapijri.jpeg'),
+('Veste de costume Daniel Hechter',7,1200,'Costume','veste_costume_daniel_hechter.jpeg'),
+('Sac à main Lilith',9,1800,'Sac à main','sac_main_lilith.jpeg'),
+('Robe courte Superdry',4,45,'Robe courte','robe_courte_superdry.jpeg');
 
 -- Insertion des qte de tailles pour chaque produit
 INSERT INTO taille_prod(taille,id_prod,qte) values

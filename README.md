@@ -6,6 +6,8 @@ Pour lancer le projet  il faut
     npm install ejs  
     npm install pg  
     npm install dotenv  
+    npm install express-session  
+    npm install body-parser  
 - Se connecter à psql avec votre nom d'utilisateur an lançant la commande  
     psql -U <psql_username> -W postgres 
 - Creer la base de données en lançant les 3 commandes suivantes   
@@ -20,7 +22,9 @@ Pour lancer le projet  il faut
     PG_PORT=5432  
     PG_USER= <psql_username>  
     PG_PASSWORD= <psql_password>   
-    PG_DATABASE=friperie
+    PG_DATABASE=friperie  
+    SESSION_SECRET=1234567890abcdefghijklmnopqrstuvwxyz  
+
 - Si vous n'avez pas de mot de passe psql alors vous devez en créer comme suit sinon ça ne marchera pas 
     - Lancez votre psql : psql
     - Connectez vous à la base postgres: \connect postgres   

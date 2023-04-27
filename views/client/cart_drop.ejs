@@ -1,0 +1,53 @@
+<!-- @if(count(\Cart::getContent()) > 0) -->
+<% if (cart.length > 0) {
+    cart.forEach(produit =>{ %>
+        <li class="list-group-item">
+            <div class="row">
+                <div class="col-lg-3">
+                    <img src="/img/<%= produit.img %>"
+                         style="width: 50px; height: 50px;"
+                    >
+                </div>
+                <div class="col-lg-3">
+                    <b><%= produit.libelle %></b>
+                    <br><small>Qte
+                    : <%= produit.qte %></small>
+                </div>
+                <div class="col-lg-2">
+                    <p><%= produit.prix %> euro</p>
+                </div>
+                <div class="col-lg-2">
+                    <p><%= parseFloat(produit.prix * produit.qte) %> euro</p>
+                </div>
+                <div class="col-lg-2">
+                    <a href="http://localhost:8080/remove_item?id=<%= produit.id %>" class="btn btn-secondary btn-sm" onclick="return confirm('Confirmer la suppression ?')"><i class="fa fa-trash"></i></a>
+
+                </div>
+                <hr>
+            </div>
+        </li>
+    <% }); %>
+    <br>
+    <li class="list-group-item">
+        <div class="row">
+            <div class="col-lg-10">
+                <b>Total: </b> <%= total_cart %> euro
+
+            </div>
+            <div class="col-lg-2">
+                <form action="http:s//localhost:8080/clear_cart" method="POST">
+                    <button class="btn btn-secondary btn-sm"><i class="fa fa-trash"></i></button>
+                </form>
+            </div>
+        </div>
+    </li>
+    <br>
+    <div class="row" style="margin: 0px;">
+        <a class="btn btn-dark btn-sm btn-block" href="{{ route('choix.adresse') }}">
+            COMMANDER<i class="fa fa-arrow-right"></i>
+        </a>
+    </div>
+<% }else{ %>
+
+    <li class="list-group-item">Panier Vide</li>
+<% }%>
