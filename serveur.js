@@ -4,6 +4,7 @@ server.use(express.static('public'));
 server.set('view engine','ejs');
 server.use(express.urlencoded({extended: true}));
 const db = require("./database.js");
+const cat = require("./category.js");
 
 
 
@@ -11,9 +12,9 @@ const db = require("./database.js");
 server.get('/',(req,res) =>{
     db.hello("Toto");
     res.render('client/welcome.ejs',{
-        message : 'Bienvenue',
+        message : 'Bienvenue dans la Friterie',
+        category : cat,
     });
-
 });
 
 

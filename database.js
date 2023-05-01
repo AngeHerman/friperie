@@ -49,11 +49,11 @@ async function run(){
 // })();
 
 function hello( n) {
-    hehe("Maman");
+    hehe("Monsieur, Madame");
     console.log("Hello tu viens d'envoyer "+n);
 }
 function hehe(n){
-    console.log("HEHE "+n);
+    console.log("Bienvenu "+n);
 }
 
 module.exports = {hello,run};

@@ -1,0 +1,40 @@
+button.expansible {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    height: auto;
+    padding: 0.7rem 0.5rem 0.3rem 0.5rem;
+    border-top: 1px solid #EDECED;
+    text-transform: uppercase;
+    font-family: "Josefin Sans", sans-serif;
+    font-weight: 300;
+    font-size: 1.2rem;
+    background-image: url('//cdn.shopify.com/s/files/1/0083/1078/4062/t/75/assets/icon-chevron-bottom.png?v=72830877910747304891679988390');
+    background-position: right 7px center;
+    background-size: 15px;
+    background-repeat: no-repeat;
+}
+
+ul.expansible {
+    display: none;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    height: auto;
+    padding: 0.25rem;
+    padding-bottom: 0.25rem;
+    list-style: none;
+    padding-bottom: 0.5rem;
+}
+
+div.expansible {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    height: auto;
+}
