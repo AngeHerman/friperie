@@ -44,6 +44,68 @@ async function getProduits(){
 }
 
 
+async function queryDatabase(query, params) {
+    try {
+        await pool.connect();
+        const values = params;
+        const result = await pool.query(query, values);
+        return result.rows;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+    //  finally {
+    //     await pool.end();
+    // }
+}
+
+async function getProduit(id){
+
+    const sql = "SELECT * FROM produit WHERE id_prod = $1";
+    let rows = await queryDatabase(sql,[id]);
+    if(!rows){
+        return null;
+    }
+    console.log(rows);
+    let p = new Object;
+    p.id = rows[0].id_prod;
+    p.libelle = rows[0].libelle;
+    p.prix = rows[0].prix;
+    p.categorie = rows[0].nom_scat;
+    p.img = rows[0].img;
+    return p;
+}
+
+async function getCategories(){
+
+    let tab = [];
+    let res =  await pool.query(
+        "select * from cat_prod"
+    );
+    for(let r of res.rows) {
+        let p = new Object;
+        p.nom = r.nom_cat;
+        tab.push(p);
+    }
+    return tab;
+}
+
+async function getSousCategories(){
+
+    let tab = [];
+    let res =  await pool.query(
+        "select * from scat_prod"
+    );
+    for(let r of res.rows) {
+        let p = new Object;
+        p.nom = r.nom_scat;
+        p.cat = r.nom_cat;
+        tab.push(p);
+    }
+    return tab;
+}
+
+
 
 
 function hello( n) {
@@ -54,4 +116,4 @@ function hehe(n){
     console.log("Bienvenu "+n);
 }
 
-module.exports = {hello,getProduits};
+module.exports = {hello,getProduits,getCategories,getSousCategories,getProduit,queryDatabase};

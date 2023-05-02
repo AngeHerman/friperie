@@ -2,12 +2,15 @@
     <div class="row">
         <% for(var i=0; i<produits.length; i++) {%>
         <a href="" class="">
+            <!-- style="height: 150px; width: 250px;display: block;" -->
 
         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 my-2">
                 <div class="card h-100 shadow" style="margin-bottom: 20px; height: auto;">
                     <img src="/img/<%= produits[i].img %>" alt=""
                     class="card-img-top mx-auto"
-                    style="height: 150px; width: 250px;display: block;"
+                    style="height: 250px;display: block;"
+
+
                     >
                     <div class="card-body">
                         <a href=""><h6 class="card-title"><%= produits[i].libelle %></h6></a>
