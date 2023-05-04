@@ -14,7 +14,11 @@
         
         <%- include('navbar.ejs') %>
         <div class="jumbotron jumbotron-fluid">
-            <h4 class="display-4"> <%= message %></h4>
+            <% if (error == 1) { %>
+                <h3 class="btn-danger"><%= message %></h3>
+              <% } else{%>
+              <h3><%= message %></h3>
+              <% }%>
         </div>
 
         

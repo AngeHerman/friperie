@@ -1,8 +1,9 @@
 <%- include('../_header.ejs') %>
 
-<h1>Modifier un produit</h1>
 
-<form action="/gerant/produit/edit/<%= produit.id %>" method="post">
+
+
+<form action="/gerant/produit/edit/<%= produit.id %>" method="post" enctype="multipart/form-data">
   <div class="form-horizontal">
 
     <%- include("editor.ejs") -%>
