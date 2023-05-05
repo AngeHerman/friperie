@@ -1,11 +1,16 @@
-<div class="cat" style="width:300; overflow: visible;">
-    <div class="expansible categories">
-        <button class="expansible" id="cat_exp">
-            Catégorie
-        </button>
-        <ul class="expansible" style ="display: none;">
-            <li data-type="categories" data-title="Chemise">Chemise</li>
-            <li data-type="categories" data-title="Pantalon">Pantalon</li>
-        </ul>
+<div class="cat">
+    <div class="categories">
+        <% for(var i=0; i<categories.length; i++) {%>
+            <div class="<%categories[i]%>" data-type="<%categories[i]%>">
+                <button class="expansible"><%= categories[i].nom %></a></button>
+                <ul class="scat" style ="display: none; list-style-type: none;">
+                    <% for(var j=0; j<scategories.length; j++) {
+                        if(scategories[j].nom == categories[i].nom){%>
+                            <li data-type="scategories" data-title="<%= scategories[j].snom %>"><a href="#<%= scategories[j].snom %>"><%= scategories[j].snom %></a></li>
+                        <%}%>
+                    <% } %>
+                </ul>
+            </div>
+        <% } %>
     </div>
 </div>

@@ -43,6 +43,32 @@ async function getProduits(){
     return tab;
 }
 
+async function getCategories(){
+    let tab = [];
+    let res =  await pool.query(
+        "select * from cat_prod"
+    );
+    for(let r of res.rows) {
+        let p = new Object;
+        p.nom = r.nom_cat;
+        tab.push(p);
+    }
+    return tab;
+}
+
+async function getSousCategories(){
+    let tab = [];
+    let res =  await pool.query(
+        "select * from scat_prod"
+    );
+    for(let r of res.rows) {
+        let p = new Object;
+        p.nom = r.nom_cat;
+        p.snom = r.nom_scat;
+        tab.push(p);
+    }
+    return tab;
+}
 
 
 
@@ -54,4 +80,4 @@ function hehe(n){
     console.log("Bienvenu "+n);
 }
 
-module.exports = {hello,getProduits};
+module.exports = {hello,getProduits,getCategories,getSousCategories};

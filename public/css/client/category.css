@@ -1,0 +1,36 @@
+
+a {
+    color: black;
+}
+
+div.categories {
+    width:100%;
+    overflow: visible;
+}
+
+button.expansible {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: rgb(243, 243, 243);
+    font-size: 24px;
+    font-family: "arial", sans-serif;
+    width: 100%;
+    height: auto;   
+    padding: 15px 5px 10px 5px;
+    border-radius: 3px;
+    border-top: 1px solid #808080;
+    text-transform: uppercase;
+}
+
+div.cat {
+    width:100%; 
+    overflow: visible;  
+}
+
+ul.scat {
+    padding: 15px 5px 10px 5px;
+    font-size: 18px;
+    justify-content: center;
+}

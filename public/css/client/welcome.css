@@ -1,0 +1,19 @@
+#back-to-top-btn {
+    display: none; /* hide the button by default */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999; /* ensure the button is above other elements */
+    font-size: 16px;
+    padding: 10px 15px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+#back-to-top-btn:hover {
+background-color: #555;
+}

@@ -4,9 +4,6 @@ server.use(express.static('public'));
 server.set('view engine','ejs');
 server.use(express.urlencoded({extended: true}));
 const db = require("./database.js");
-<<<<<<< HEAD
-const cat = require("./category.js");
-=======
 const body_parser = require('body-parser');
 const session = require('express-session');
 server.use(body_parser.urlencoded({ extended : false }));
@@ -18,7 +15,6 @@ server.use(session({
 	saveUninitialized : true,
 	cookie : { secure : false }
 }));
->>>>>>> frontend
 
 
 
@@ -41,21 +37,20 @@ function get_cart_total_qte(req){
 server.get('/',async (req,res) =>{
     db.hello("Toto");
     const produits = await db.getProduits();
+	const categories = await db.getCategories();
+	const scategories = await db.getSousCategories();
     if(!req.session.cart)
     {
         req.session.cart = [];
     }
     res.render('client/welcome.ejs',{
-<<<<<<< HEAD
-        message : 'Bienvenue dans la Friterie',
-        category : cat,
-=======
         message : 'Bienvenue',
         produits : produits,
         cart : req.session.cart,
         total_cart : get_cart_total(req),
-        qte_total_cart : get_cart_total_qte(req)
->>>>>>> frontend
+        qte_total_cart : get_cart_total_qte(req),
+		categories : categories,
+		scategories : scategories
     });
 });
 
