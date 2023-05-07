@@ -105,6 +105,39 @@ async function getSousCategories(){
     return tab;
 }
 
+async function getQteTailleProds(){
+
+    let tab = [];
+    let res =  await pool.query(
+        "select * FROM taille_prod"
+    );
+    for(let r of res.rows) {
+        let p = new Object;
+        p.taille = r.taille;
+        p.id = r.id_prod;
+        p.qte = r.qte;
+        tab.push(p);
+    }
+    return tab;
+}
+
+async function get_last_idcli(){
+
+    let tab = [];
+    let res =  await pool.query(
+        "select MAX(id_cli) as id from client"
+    );
+    res.rows[0].id;
+}
+
+async function get_last_idcomm(){
+
+    let tab = [];
+    let res =  await pool.query(
+        "select MAX(id_comm) as id from commandes"
+    );
+    res.rows[0].id;
+}
 
 
 
@@ -116,4 +149,5 @@ function hehe(n){
     console.log("Bienvenu "+n);
 }
 
-module.exports = {hello,getProduits,getCategories,getSousCategories,getProduit,queryDatabase};
+module.exports = {hello,getProduits,getCategories,getSousCategories,getProduit,queryDatabase,getQteTailleProds,get_last_idcli,
+get_last_idcomm};

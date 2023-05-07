@@ -13,7 +13,6 @@ server.use(session({
 	cookie : { secure : false }
 }));
 const db = require("./database.js");
-const cat = require("./category.js");
 const body_parser = require('body-parser');
 
 
@@ -55,12 +54,90 @@ function check_form_produit_sauf_img(req){
 
 }
 
+function check_form_donnee(req){
+
+	if (req.body.nom.length == 0 || req.body.prenom.length == 0 || 
+		req.body.adresse.length == 0 || req.body.tel.length == 0 || req.body.email.length == 0){
+		return false;
+	}else{
+		return true;
+	}
+
+}
+
+async function check_dispo_produit(req){
+	let prob = "Certains produit ne sont plus disponibles, les voicis ainsi que leur disponibilités ...";
+	let ret = true;
+	qte_taille = await db.getQteTailleProds();
+	req.session.cart.forEach(async (p_cart) => {
+		const ligne_produit = qte_taille.find(u => u.taille === p_cart.taille && u.id === p_cart.id);
+		if (ligne_produit === undefined){
+			ret = false;
+			prob += ", " + p_cart.libelle + " : " + p_cart.taille + " : 0";
+		}
+		else if (ligne_produit.qte < p_cart.qte){
+			ret = false;
+			prob += ", " + p_cart.libelle + " : " + p_cart.taille + " : "+ ligne_produit.qte;
+		}
+	});
+
+	return {
+		probleme: prob,
+		retour: ret
+	};
+}
+
 function get_cart_total_qte(req){
     let total = 0;
     req.session.cart.forEach(produit => {
         total += produit.qte;
     });
     return total;
+}
+
+async function remplissage_commande(req){
+	// On crée le client
+    const query = "INSERT INTO client(nom,prenom,adresse,telephone,email) VALUES ($1, $2, $3, $4, $5)";
+	const params = [req.body.nom,req.body.prenom, req.body.adresse, req.body.tel, req.body.email];
+	let r1 = await db.queryDatabase(query,params);
+
+	// On prend l'id du client
+	let id_client = await db.get_last_idcli();
+
+	//On crée la commande
+	const query2 = "INSERT INTO commandes(adresse,mail,prix,valider) VALUES ($1, $2, $3, $4)";
+	const params2 = [req.body.adresse,req.body.mail, get_cart_total(req), 0];
+	let r2 = await db.queryDatabase(query,params);
+
+	// On prend l'id de la commande
+	let id_comm = await db.get_last_idcomm();
+
+	//On lie le client à la commande
+	const query3 = "INSERT INTO client_comm(id_cli, id_comm) VALUES ($1, $2)";
+	const params3 = [id_client,id_comm];
+	let r3 = await db.queryDatabase(query,params);
+
+	//On lie les produits commandés à la commande 
+	for(let i = 0; i < req.session.cart.length; i++)
+	{
+
+		const query4 = "INSERT INTO comm_prod(id_prod, id_comm, qte, taille) VALUES ($1, $2, $3, $4)";
+		const params4 = [req.session.cart[i].id ,id_comm, req.session.cart[i].qte, req.session.cart[i].taille];
+		let r4 = await db.queryDatabase(query,params);
+	}
+
+	//On diminue la quantité de produits dans la base de données
+	qte_taille = await db.getQteTailleProds();
+	req.session.cart.forEach(async (p_cart) => {
+		const ligne_produit = qte_taille.find(u => u.taille === p_cart.taille && u.id === p_cart.id);
+		const nouvelle_qte = ligne_produit.qte - p_cart.qte;
+		console.log(nouvelle_qte);
+
+		const query5 = "UPDATE taille_prod SET qte = $1 WHERE id_prod = $2 AND taille = $3";
+		const params5 = [nouvelle_qte ,p_cart.id,p_cart.taille];
+		let r5 = await db.queryDatabase(query,params);
+	});
+
 }
 
 server.get('/',async (req,res) =>{
@@ -219,8 +296,8 @@ server.post("/gerant/produit/create", async (req, res) => {
 	// console.log(filename);
 	// console.log(check_form_produit(req));
 	if(check_form_produit(req)){
-		const query = "INSERT INTO produit (libelle, qte,prix,img,nom_scat) VALUES ($1, $2, $3, $4, $5)";
-		const params = [req.body.libelle,0 , parseFloat(req.body.prix), filename, req.body.categorie];
+		const query = "INSERT INTO produit (libelle,prix,img,nom_scat) VALUES ($1, $2, $3, $4, $5)";
+		const params = [req.body.libelle , parseFloat(req.body.prix), filename, req.body.categorie];
 		let r = await db.queryDatabase(query,params);
 		res.redirect("/gerant/produit");
 
@@ -254,6 +331,62 @@ server.get("/gerant/produit/delete/:id", async (req, res) => {
 	console.log(r);
 	res.redirect("/gerant/produit");
 });
+
+server.get("/valider_panier", async (req, res) => {
+	res.render('client/saisir_donnee.ejs',{
+		message : 'Saisissez les données de livraison',
+		nom : "",
+		error : 0,
+		prenom : "",
+		adresse : "",
+		tel : "",
+		email : "",
+		cart : req.session.cart,
+        total_cart : get_cart_total(req),
+        qte_total_cart : get_cart_total_qte(req)
+	});
+});
+
+server.post("/commander", async (req, res) => {
+
+	if(check_form_donnee(req)){
+		const result = await check_dispo_produit(req);
+		if(!result.retour){
+			res.render('client/saisir_donnee.ejs',{
+				message : result.probleme,
+				nom : req.body.nom,
+				error : 1,
+				prenom : req.body.prenom,
+				adresse : req.body.adresse,
+				tel : req.body.tel,
+				email : req.body.email,
+				cart : req.session.cart,
+				total_cart : get_cart_total(req),
+				qte_total_cart : get_cart_total_qte(req)
+			});
+		}
+		remplissage_commande(req);
+		res.redirect("/clear_cart");
+
+	}else{
+
+		res.render('client/saisir_donnee.ejs',{
+			message : 'Formulaire incorrect',
+			nom : req.body.nom,
+			error : 1,
+			prenom : req.body.prenom,
+			adresse : req.body.adresse,
+			tel : req.body.tel,
+			email : req.body.email,
+			cart : req.session.cart,
+			total_cart : get_cart_total(req),
+			qte_total_cart : get_cart_total_qte(req)
+		});
+	}
+	
+});
+
+
 
 server.use((req,res) => {
     // console.log("Entree dans abort");
