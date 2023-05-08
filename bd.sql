@@ -13,6 +13,8 @@ drop table if exists gerant cascade;
 drop table if exists client cascade;
 drop table if exists commandes cascade;
 drop table if exists client_comm cascade;
+drop table if exists comm_prod cascade;
+
 
 
 CREATE TABLE cat_prod(
@@ -101,7 +103,7 @@ CREATE TABLE commandes(
     id_comm serial PRIMARY KEY,
     adresse VARCHAR(200),
     mail VARCHAR(100),
-    prix int,
+    prix DECIMAL(10,2),
     valider int
     
 );

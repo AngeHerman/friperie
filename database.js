@@ -9,11 +9,11 @@ const pool = new Pool({
 	database: process.env.PG_DATABASE,
 	// ssl: true,
 });
-console.log("avant");
+// console.log("avant");
 (async() => {
 	try {
 		await pool.connect();
-		console.log("apres");
+		// console.log("apres");
 	
 		const res = await pool.query('SELECT $1::text as connected', ['Connection to postgres successful!']);
 		console.log(res.rows[0].connected);
@@ -127,7 +127,7 @@ async function get_last_idcli(){
     let res =  await pool.query(
         "select MAX(id_cli) as id from client"
     );
-    res.rows[0].id;
+    return parseInt( res.rows[0].id);
 }
 
 async function get_last_idcomm(){
@@ -136,7 +136,7 @@ async function get_last_idcomm(){
     let res =  await pool.query(
         "select MAX(id_comm) as id from commandes"
     );
-    res.rows[0].id;
+    return parseInt( res.rows[0].id);
 }
 
 
