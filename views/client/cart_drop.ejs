@@ -12,6 +12,7 @@
                     <b><%= produit.libelle %></b>
                     <br><small>Qte
                     : <%= produit.qte %></small>
+                    <small>Taille: <%= produit.taille %></small>
                 </div>
                 <div class="col-lg-2">
                     <p><%= produit.prix %> euro</p>
@@ -20,7 +21,7 @@
                     <p><%= parseFloat(produit.prix * produit.qte) %> euro</p>
                 </div>
                 <div class="col-lg-2">
-                    <a href="http://localhost:8080/remove_item?id=<%= produit.id %>" class="btn btn-secondary btn-sm" onclick="return confirm('Confirmer la suppression ?')"><i class="fa fa-trash"></i></a>
+                    <a href="http://localhost:8080/remove_item?id=<%= produit.id %>&taille=<%= produit.taille %>" class="btn btn-secondary btn-sm" onclick="return confirm('Confirmer la suppression ?')"><i class="fa fa-trash"></i></a>
 
                 </div>
                 <hr>
@@ -35,7 +36,7 @@
 
             </div>
             <div class="col-lg-2">
-                <form action="http:s//localhost:8080/clear_cart" method="POST">
+                <form action="http://localhost:8080/clear_cart" method="POST">
                     <button class="btn btn-secondary btn-sm"><i class="fa fa-trash"></i></button>
                 </form>
             </div>
@@ -43,8 +44,8 @@
     </li>
     <br>
     <div class="row" style="margin: 0px;">
-        <a class="btn btn-dark btn-sm btn-block" href="{{ route('choix.adresse') }}">
-            COMMANDER<i class="fa fa-arrow-right"></i>
+        <a class="btn btn-dark btn-sm btn-block" href="/valider_panier">
+            Valider Panier<i class="fa fa-arrow-right"></i>
         </a>
     </div>
 <% }else{ %>

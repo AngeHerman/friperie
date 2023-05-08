@@ -9,11 +9,11 @@ const pool = new Pool({
 	database: process.env.PG_DATABASE,
 	// ssl: true,
 });
-console.log("avant");
+// console.log("avant");
 (async() => {
 	try {
 		await pool.connect();
-		console.log("apres");
+		// console.log("apres");
 	
 		const res = await pool.query('SELECT $1::text as connected', ['Connection to postgres successful!']);
 		console.log(res.rows[0].connected);
@@ -63,11 +63,91 @@ async function getSousCategories(){
     );
     for(let r of res.rows) {
         let p = new Object;
-        p.nom = r.nom_cat;
         p.snom = r.nom_scat;
+        p.nom = r.nom_cat; 
         tab.push(p);
     }
     return tab;
+}
+
+async function queryDatabase(query, params) {
+    try {
+        await pool.connect();
+        const values = params;
+        const result = await pool.query(query, values);
+        return result.rows;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+    //  finally {
+    //     await pool.end();
+    // }
+}
+
+async function getProduit(id){
+
+    const sql = "SELECT * FROM produit WHERE id_prod = $1";
+    let rows = await queryDatabase(sql,[id]);
+    if(!rows){
+        return null;
+    }
+    console.log(rows);
+    let p = new Object;
+    p.id = rows[0].id_prod;
+    p.libelle = rows[0].libelle;
+    p.prix = rows[0].prix;
+    p.categorie = rows[0].nom_scat;
+    p.img = rows[0].img;
+    return p;
+}
+
+async function getCategories(){
+
+    let tab = [];
+    let res =  await pool.query(
+        "select * from cat_prod"
+    );
+    for(let r of res.rows) {
+        let p = new Object;
+        p.nom = r.nom_cat;
+        tab.push(p);
+    }
+    return tab;
+}
+
+async function getQteTailleProds(){
+
+    let tab = [];
+    let res =  await pool.query(
+        "select * FROM taille_prod"
+    );
+    for(let r of res.rows) {
+        let p = new Object;
+        p.taille = r.taille;
+        p.id = r.id_prod;
+        p.qte = r.qte;
+        tab.push(p);
+    }
+    return tab;
+}
+
+async function get_last_idcli(){
+
+    let tab = [];
+    let res =  await pool.query(
+        "select MAX(id_cli) as id from client"
+    );
+    return parseInt( res.rows[0].id);
+}
+
+async function get_last_idcomm(){
+
+    let tab = [];
+    let res =  await pool.query(
+        "select MAX(id_comm) as id from commandes"
+    );
+    return parseInt( res.rows[0].id);
 }
 
 
@@ -80,4 +160,5 @@ function hehe(n){
     console.log("Bienvenu "+n);
 }
 
-module.exports = {hello,getProduits,getCategories,getSousCategories};
+module.exports = {hello,getProduits,getCategories,getSousCategories,getProduit,queryDatabase,getQteTailleProds,get_last_idcli,
+get_last_idcomm};

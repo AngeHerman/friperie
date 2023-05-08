@@ -1,0 +1,29 @@
+<h1>Liste des produits (<%= produits.length %>)</h1>
+
+<div class="table-responsive-sm">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Libelle</th>
+        <th>Prix</th>
+        <th>Categorie</th>
+        <th class="d-print-none">
+          <a class="btn btn-sm btn-success" href="/gerant/produit/create">Ajouter</a>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (const p of produits) { %>
+        <tr>
+          <td><%= p.libelle %></td>
+          <td><%= p.prix %></td>
+          <td><%= p.categorie %></td>
+          <td class="d-print-none">
+            <a class="btn btn-sm btn-warning" href="/gerant/produit/edit/<%= p.id %>">Modifier</a>
+            <a class="btn btn-sm btn-danger" href="/gerant/produit/delete/<%= p.id %>" onclick="return confirm('Confirmer la suppression ?')">Effacer</a>
+          </td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+</div>
