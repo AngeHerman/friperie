@@ -150,6 +150,58 @@ async function get_last_idcomm(){
     return parseInt( res.rows[0].id);
 }
 
+async function get_comm_non_valider(){
+
+    let tab = [];
+    let res =  await pool.query(
+        "select * FROM commandes where valider = 0"
+    );
+    for(let r of res.rows) {
+        let p = new Object;
+        p.id = r.id_comm;
+        p.adresse = r.adresse;
+        p.mail = r.mail;
+        p.prix = r.prix;
+        tab.push(p);
+    }
+    return tab;
+}
+
+async function get_comm_valider(){
+
+    let tab = [];
+    let res =  await pool.query(
+        "select * FROM commandes where valider = 1"
+    );
+    for(let r of res.rows) {
+        let p = new Object;
+        p.id = r.id_comm;
+        p.adresse = r.adresse;
+        p.mail = r.mail;
+        p.prix = r.prix;
+        tab.push(p);
+    }
+    return tab;
+}
+
+async function get_produits_comm(id_comm){
+    let tab = [];
+    const query = "select * from produit natural join comm_prod where id_comm = $1"
+    let rows = await queryDatabase(query,[id_comm]);
+    if(!rows){
+        return null;
+    }
+    for(let r of rows) {
+        let p = new Object;
+        p.img = r.img;
+        p.libelle = r.libelle;
+        p.qte = r.qte;
+        p.taille = r.taille;
+        p.prix = r.prix;
+        tab.push(p);
+    }
+    return tab;
+}
 
 
 function hello( n) {
@@ -161,4 +213,4 @@ function hehe(n){
 }
 
 module.exports = {hello,getProduits,getCategories,getSousCategories,getProduit,queryDatabase,getQteTailleProds,get_last_idcli,
-get_last_idcomm};
+get_last_idcomm,get_comm_non_valider,get_comm_valider,get_produits_comm};

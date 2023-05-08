@@ -261,6 +261,10 @@ server.get('/remove_item', (req, res) => {
 
 });
 
+server.get("/gerant", (req, res) => {
+	res.redirect("/gerant/produit");
+});
+
 server.get("/gerant/produit", async (req, res) => {
     const produits = await db.getProduits();
 	res.render('gerant/produit/welcome.ejs',{
@@ -466,6 +470,48 @@ server.post("/commander", async (req, res) => {
 		total_cart,
 		qte_total_cart,
 	});
+});
+
+server.get("/gerant/comm_non_valide", async (req, res) => {
+	const comm = await db.get_comm_non_valider();
+	res.render("gerant/commande/comm_non_valide.ejs",{
+		message : 'Voici les commandes pas encore validées',
+		comm : comm,
+		error : 0,
+	});
+});
+
+server.get("/gerant/comm_valide", async (req, res) => {
+	const comm = await db.get_comm_valider();
+	res.render("gerant/commande/comm_valide.ejs",{
+		message : 'Voici les commandes déja validées (livrées)',
+		comm : comm,
+		error : 0,
+
+	});
+});
+
+server.get("/gerant/comm/show/:id_comm", async (req, res) => {
+	const id_comm = parseInt(req.params.id_comm);
+	const produits = await db.get_produits_comm(id_comm);
+	res.render("gerant/commande/show.ejs",{
+		message : 'Voici les détails de la commande',
+		produits : produits,
+		error : 0,
+
+	});
+});
+
+server.get("/gerant/comm/valider/:id_comm", async (req, res) => {
+	const id_comm = parseInt(req.params.id_comm);
+	try {
+		const params = [id_comm];
+		const query = "UPDATE commandes SET valider = 1  WHERE id_comm = $1";
+		let r = await db.queryDatabase(query,params);
+		res.redirect("/gerant/comm_non_valide");
+	} catch (error) {
+		console.log("Erreur lors de la validation de la commande");
+	}
 });
 
 server.use((req,res) => {
