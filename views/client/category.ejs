@@ -10,7 +10,7 @@
                             const tmp2 = tmp.replace(/ /g,"_");
                             const link = tmp2.replace(/à/g,"a");
                             %>
-                            <li class="scat" data-type="scategories" data-title="<%= scategories[j].snom %>"><a href="http://localhost:8080/<%=link%>"><%= scategories[j].snom %></a></li>
+                            <li class="scat" data-type="scategories" data-title="<%= scategories[j].snom %>"><a href="http://localhost:8080/rech_cat/<%=link%>"><%= scategories[j].snom %></a></li>
                         <%}%>
                     <% } %>
                 </ul>

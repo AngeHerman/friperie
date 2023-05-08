@@ -118,7 +118,7 @@ INSERT INTO cat_prod values
 ('Short'),
 ('Sac'),
 ('Jupe'),
-('Robe'),
+('Robe');
 
 -- Insertion des sous categories
 INSERT INTO scat_prod values
@@ -128,7 +128,7 @@ INSERT INTO scat_prod values
 ('Jupe courte','Jupe'),
 ('Jupe longue','Jupe'),
 ('Veste','Chemise'),
-('Sac à main','Sac'),
+('Sac a main','Sac'),
 ('Pull','Chemise'),
 ('T_shirt','Chemise'),
 ('Manteau','Chemise'),
@@ -158,7 +158,7 @@ INSERT INTO produit(libelle,qte, prix,nom_scat,img) values
 ('Veste Adidas',13,85.99,'Veste','veste_adidas.jpeg'),
 ('Manteau Napapijri',11,35,'Manteau','manteau_napapijri.jpeg'),
 ('Veste de costume Daniel Hechter',7,1200,'Costume','veste_costume_daniel_hechter.jpeg'),
-('Sac à main Lilith',9,1800,'Sac à main','sac_main_lilith.jpeg'),
+('Sac à main Lilith',9,1800,'Sac a main','sac_main_lilith.jpeg'),
 ('Robe courte Superdry',4,45,'Robe courte','robe_courte_superdry.jpeg');
 
 -- Insertion des qte de tailles pour chaque produit
