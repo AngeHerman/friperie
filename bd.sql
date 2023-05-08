@@ -119,7 +119,6 @@ INSERT INTO cat_prod values
 ('Sac'),
 ('Jupe'),
 ('Robe'),
-('Veste');
 
 -- Insertion des sous categories
 INSERT INTO scat_prod values
