@@ -7,7 +7,8 @@
                     <% for(var j=0; j<scategories.length; j++) {
                         if(scategories[j].nom == categories[i].nom){
                             const tmp = (scategories[j].snom);
-                            const link = tmp.replace(/ /g,"_");
+                            const tmp2 = tmp.replace(/ /g,"_");
+                            const link = tmp2.replace(/à/g,"a");
                             %>
                             <li class="scat" data-type="scategories" data-title="<%= scategories[j].snom %>"><a href="http://localhost:8080/<%=link%>"><%= scategories[j].snom %></a></li>
                         <%}%>

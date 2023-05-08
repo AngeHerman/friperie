@@ -223,7 +223,7 @@ server.get('/Short_de_sport',async (req,res) =>{
     });
 });
 
-server.get('/Sac_à_main',async (req,res) =>{
+server.get('/Sac_a_main',async (req,res) =>{
     db.hello("Toto");
     const produits = await db.getProduits();
 	const categories = await db.getCategories();
