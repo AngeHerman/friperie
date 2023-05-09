@@ -246,7 +246,7 @@ server.get('/remove_item', (req, res) => {
 	const taille = req.query.taille;
 
 	
-    console.log("Arrivé et id est " +id);
+    // console.log("Arrivé et id est " +id);
 
 	for(let i = 0; i < req.session.cart.length; i++)
 	{

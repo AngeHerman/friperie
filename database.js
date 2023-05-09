@@ -92,7 +92,7 @@ async function getProduit(id){
     if(!rows){
         return null;
     }
-    console.log(rows);
+    // console.log(rows);
     let p = new Object;
     p.id = rows[0].id_prod;
     p.libelle = rows[0].libelle;
