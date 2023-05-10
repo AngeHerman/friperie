@@ -73,6 +73,7 @@ CREATE TABLE combinaison(
     id_combi serial PRIMARY KEY,
     nom VARCHAR(30),
     nom_cat_combi VARCHAR(30),
+    prix int,
     FOREIGN KEY (nom_cat_combi) REFERENCES cat_combi(nom_cat_combi)   
 );
 
@@ -176,36 +177,114 @@ INSERT INTO produit(libelle,prix,nom_scat,img) values
 ('Manteau Napapijri',35,'Manteau','manteau_napapijri.jpeg'),
 ('Veste de costume Daniel Hechter',1200,'Costume','veste_costume_daniel_hechter.jpeg'),
 ('Sac à main Lilith',1800,'Sac a main','sac_main_lilith.jpeg'),
-('Robe courte Superdry',45,'Robe courte','robe_courte_superdry.jpeg');
+('Robe courte Superdry',45,'Robe courte','robe_courte_superdry.jpeg'),
+('T_shirt Kalenji',10,'T_shirt','t_shirt_kalenji.jpeg');
 
 -- Insertion des qte de tailles pour chaque produit
 INSERT INTO taille_prod(taille,id_prod,qte) values
-('S',1,13), -- Le produit 1 (jean denim) a 13 quantité de taille S
-('M',1,2), -- Le produit 1 (jean denim) a 2 quantité de taille M
+('XXS',1,13), -- Le produit 1 (jean denim) a 13 quantité de taille S
+('XS',1,2), -- Le produit 1 (jean denim) a 2 quantité de taille M
+('S',1,2),
+('M',1,0),
+('L',1,0),
+('XL',1,0),
+('XXL',1,0),
+('XXS',2,0),
 ('XS',2,4),
 ('S',2,6),
 ('M',2,3),
+('L',2,0),
+('XL',2,0),
+('XXL',2,0),
+('XXS',3,0),
+('XS',3,0),
 ('S',3,4),
 ('M',3,9),
 ('L',3,2),
+('XL',3,0),
+('XXL',3,0),
+('XXS',4,0),
+('XS',4,0),
 ('S',4,6),
 ('M',4,7),
 ('L',4,2),
+('XL',4,0),
+('XXL',4,0),
+('XXS',5,0),
+('XS',5,0),
 ('S',5,8),
 ('M',5,7),
+('L',5,0),
+('XL',5,0),
+('XXL',5,0),
+('XXS',6,0),
+('XS',6,0),
 ('S',6,4),
 ('M',6,7), 
+('L',6,0),
+('XL',6,0),
+('XXL',6,0),
+('XXS',7,0),
+('XS',7,0),
 ('S',7,5),
 ('M',7,7),
 ('L',7,6),
+('XL',7,0),
+('XXL',7,0),
+('XXS',8,0),
+('XS',8,0),
+('S',8,0),
 ('M',8,7),
 ('L',8,7),
+('XL',8,0),
+('XXL',8,0),
+('XXS',9,0),
+('XS',9,0),
 ('S',9,4),
 ('M',9,3),
+('L',9,0),
+('XL',9,0),
+('XXL',9,0),
+('XXS',10,0),
+('XS',10,0),
+('S',10,0),
 ('M',10,3),
 ('L',10,2), 
+('XL',10,0),
+('XXL',10,0),
+('XXS',11,0),
+('XS',11,0),
 ('S',11,4),
 ('M',11,5),
 ('L',11,5),
-('M',12,13);
+('XL',11,0),
+('XXL',11,0),
+('XXS',12,0),
+('XS',12,0),
+('S',12,0),
+('M',12,13),
+('L',12,0),
+('XL',12,0),
+('XXL',12,0),
+('XXS',13,0),
+('XS',13,0),
+('S',13,4),
+('M',13,5),
+('L',13,0),
+('XL',13,0),
+('XXL',13,0);
 
+INSERT INTO cat_combi(nom_cat_combi) values
+('Homme'),
+('Femme');
+
+INSERT INTO combinaison(id_combi,nom,nom_cat_combi,prix) values
+(1,'Sport','Homme',50),
+(2,'Classique','Femme',80);
+
+INSERT INTO produit_combi(id_prod,id_combi) values
+(3,1),
+(13,1),
+(6,2),
+(7,2),
+(11,2);

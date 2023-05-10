@@ -165,6 +165,7 @@ server.get('/',async (req,res) =>{
         message : 'Bienvenue dans la Friperie',
         produits : produits,
 		filtre : '',
+		combi : false,
         cart : req.session.cart,
         total_cart : get_cart_total(req),
         qte_total_cart : get_cart_total_qte(req),
@@ -187,6 +188,7 @@ server.get("/rech_cat/:scat", async (req, res) => {
     res.render('client/welcome.ejs',{
         message : 'Bienvenue',
         produits : produits,
+		combi : false,
 		filtre : tmp,
         cart : req.session.cart,
         total_cart : get_cart_total(req),
@@ -195,6 +197,60 @@ server.get("/rech_cat/:scat", async (req, res) => {
 		scategories : scategories
     });
 });
+
+server.get('/Combinaisons',async (req,res) =>{
+    // db.hello("Toto");
+    const produits = await db.getProduits();
+	const categories = await db.getCategories();
+	const scategories = await db.getSousCategories();
+	const cat_combi = await db.getCatCombinaisons();
+	const prod_combi = await db.getProdCombinaisons();
+	const combinaisons = await db.getCombinaisons();
+    if(!req.session.cart)
+    {
+        req.session.cart = [];
+    }
+    res.render('client/welcome.ejs',{
+		slideshow : 0,
+        message : 'Les combinaisons',
+        produits : produits,
+		filtre : '',
+		combi : true,
+        cart : req.session.cart,
+        total_cart : get_cart_total(req),
+        qte_total_cart : get_cart_total_qte(req),
+		categories : cat_combi,
+		combinaisons : combinaisons,
+		prod_combi : prod_combi
+    });
+});
+
+server.get('/Combinaisons/rech_cat_combi/:cat',async (req,res) =>{
+    // db.hello("Toto");
+	const cat = req.params.cat;
+    const produits = await db.getProduits();
+	const cat_combi = await db.getCatCombinaisons();
+	const prod_combi = await db.getProdCombinaisons();
+	const combinaisons = await db.getCombinaisons();
+    if(!req.session.cart)
+    {
+        req.session.cart = [];
+    }
+    res.render('client/welcome.ejs',{
+		slideshow : 0,
+        message : 'Les combinaisons',
+        produits : produits,
+		filtre : cat,
+		combi : true,
+        cart : req.session.cart,
+        total_cart : get_cart_total(req),
+        qte_total_cart : get_cart_total_qte(req),
+		categories : cat_combi,
+		combinaisons : combinaisons,
+		prod_combi : prod_combi
+    });
+});
+
 
 server.post('/add_cart', (req, res) => {
 

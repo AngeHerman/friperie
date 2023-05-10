@@ -102,15 +102,47 @@ async function getProduit(id){
     return p;
 }
 
-async function getCategories(){
+async function getCatCombinaisons(){
 
     let tab = [];
     let res =  await pool.query(
-        "select * from cat_prod"
+        "select * from cat_combi"
     );
     for(let r of res.rows) {
         let p = new Object;
-        p.nom = r.nom_cat;
+        p.nom = r.nom_cat_combi;
+        tab.push(p);
+    }
+    return tab;
+}
+
+async function getCombinaisons(){
+
+    let tab = [];
+    let res =  await pool.query(
+        "select * from combinaison"
+    );
+    for(let r of res.rows) {
+        let p = new Object;
+        p.idcombi = r.id_combi;
+        p.nom = r.nom;
+        p.nom_cat_combi = r.nom_cat_combi;
+        p.prix = r.prix;
+        tab.push(p);
+    }
+    return tab;
+}
+
+async function getProdCombinaisons(){
+
+    let tab = [];
+    let res =  await pool.query(
+        "select * from produit_combi"
+    );
+    for(let r of res.rows) {
+        let p = new Object;
+        p.idprod = r.id_prod;
+        p.idcombi = r.id_combi;
         tab.push(p);
     }
     return tab;
@@ -160,5 +192,5 @@ function hehe(n){
     console.log("Bienvenu "+n);
 }
 
-module.exports = {hello,getProduits,getCategories,getSousCategories,getProduit,queryDatabase,getQteTailleProds,get_last_idcli,
+module.exports = {hello,getProduits,getCategories,getSousCategories,getProduit,getCombinaisons,getCatCombinaisons,getProdCombinaisons,queryDatabase,getQteTailleProds,get_last_idcli,
 get_last_idcomm};
