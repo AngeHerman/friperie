@@ -1,0 +1,23 @@
+<%- include('../_header.ejs') %>
+
+<% for (const p of produits) { %>
+
+                
+<div class="row">
+    <div class="col-lg-5">
+        <img src="/img/<%= p.img %>" class="img-thumbnail" width="200" height="200">
+    </div>
+    <div class="col-lg-7">
+        <p>
+            <b>Libelle : </b> <%= p.libelle %><br>
+            <b>Qte : </b> <%= p.qte %> <br>
+            <b>Prix par unité : </b> <%= p.prix %> <br>
+            <b>Taille : </b> <%= p.taille %> <br>
+            <b>Prix total: </b> <%= p.qte * p.prix %><br>
+        </p>
+    </div>
+</div>
+<hr>
+<% } %>
+                
+<%- include('../_footer.ejs') %>

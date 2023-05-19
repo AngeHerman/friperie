@@ -25,6 +25,10 @@ function get_cart_total(req){
     return total;
 }
 
+function estEntier(str) {
+	return !isNaN(parseInt(str)) && Number.isInteger(parseFloat(str));
+}
+
 function check_form_produit(req){
 	// console.log(req.files);
 	// console.log("file size est "+req.files.file.size);
@@ -34,7 +38,11 @@ function check_form_produit(req){
 
 
 	if (req.body.libelle.length == 0 || req.body.categorie.length == 0 || 
-		!Number.isFinite(parseFloat(req.body.prix)) || req.files.file.size == 0){
+		!Number.isFinite(parseFloat(req.body.prix)) || req.files.file.size == 0 ||
+		!estEntier(req.body.XXS) || !estEntier(req.body.XS) || !estEntier(req.body.S) ||
+		!estEntier(req.body.M) || !estEntier(req.body.L) || !estEntier(req.body.XL)
+		|| !estEntier(req.body.XXL)
+		){
 		return false;
 	}else{
 		return true;
@@ -45,7 +53,10 @@ function check_form_produit(req){
 function check_form_produit_sauf_img(req){
 
 	if (req.body.libelle.length == 0 || req.body.categorie.length == 0 || 
-		!Number.isFinite(parseFloat(req.body.prix))){
+		!Number.isFinite(parseFloat(req.body.prix)) ||
+		!estEntier(req.body.XXS) || !estEntier(req.body.XS) || !estEntier(req.body.S) ||
+		!estEntier(req.body.M) || !estEntier(req.body.L) || !estEntier(req.body.XL)
+		|| !estEntier(req.body.XXL)){
 		return false;
 	}else{
 		return true;
@@ -94,6 +105,83 @@ function get_cart_total_qte(req){
     return total;
 }
 
+async function ajout_des_tailles(req){
+	try {
+		// On prend l'id du client
+		let id_prod = await db.get_last_idprod();
+
+		// On ajoute les tailles
+		const query = "INSERT INTO taille_prod(taille,id_prod,qte) values('XXS',$1,$2)";
+		const params = [id_prod, parseInt(req.body.XXS)];
+		let r1 = await db.queryDatabase(query,params);
+
+		const query2 = "INSERT INTO taille_prod(taille,id_prod,qte) values('XS',$1,$2)";
+		const params2 = [id_prod, parseInt(req.body.XS)];
+		let r2 = await db.queryDatabase(query2,params2);
+
+		const query3 = "INSERT INTO taille_prod(taille,id_prod,qte) values('S',$1,$2)";
+		const params3 = [id_prod, parseInt(req.body.S)];
+		let r3 = await db.queryDatabase(query3,params3);
+
+		const query4 = "INSERT INTO taille_prod(taille,id_prod,qte) values('M',$1,$2)";
+		const params4 = [id_prod, parseInt(req.body.M)];
+		let r4 = await db.queryDatabase(query4,params4);
+
+		const query5 = "INSERT INTO taille_prod(taille,id_prod,qte) values('L',$1,$2)";
+		const params5 = [id_prod, parseInt(req.body.L)];
+		let r5 = await db.queryDatabase(query5,params5);
+
+		const query6 = "INSERT INTO taille_prod(taille,id_prod,qte) values('XL',$1,$2)";
+		const params6 = [id_prod, parseInt(req.body.XL)];
+		let r6 = await db.queryDatabase(query6,params6);
+
+		const query7 = "INSERT INTO taille_prod(taille,id_prod,qte) values('XXL',$1,$2)";
+		const params7 = [id_prod, parseInt(req.body.XXL)];
+		let r7 = await db.queryDatabase(query7,params7);
+	} catch (error) {
+		console.log("Erreur lors de ajout de taille");
+		
+	}
+}
+
+async function update_des_tailles(req, id_prod){
+	try {
+		// console.log("Arrivé update taille et xxs est "+req.body.XXS);
+		// On ajoute les tailles
+		const query = "UPDATE taille_prod set qte = $1 where taille = 'XXS' AND id_prod = $2";
+		const params = [parseInt(req.body.XXS),id_prod];
+		let r1 = await db.queryDatabase(query,params);
+
+		const query2 = "UPDATE taille_prod set qte = $1 where taille = 'XS' AND id_prod = $2";
+		const params2 = [parseInt(req.body.XS),id_prod];
+		let r2 = await db.queryDatabase(query2,params2);
+
+		const query3 = "UPDATE taille_prod set qte = $1 where taille = 'S' AND id_prod = $2";
+		const params3 = [parseInt(req.body.S),id_prod];
+		let r3 = await db.queryDatabase(query3,params3);
+
+		const query4 = "UPDATE taille_prod set qte = $1 where taille = 'M' AND id_prod = $2";
+		const params4 = [parseInt(req.body.M),id_prod];
+		let r4 = await db.queryDatabase(query4,params4);
+
+		const query5 = "UPDATE taille_prod set qte = $1 where taille = 'L' AND id_prod = $2";
+		const params5 = [parseInt(req.body.L),id_prod];
+		let r5 = await db.queryDatabase(query5,params5);
+
+		const query6 = "UPDATE taille_prod set qte = $1 where taille = 'XL' AND id_prod = $2";
+		const params6 = [parseInt(req.body.XL),id_prod];
+		let r6 = await db.queryDatabase(query6,params6);
+
+		const query7 = "UPDATE taille_prod set qte = $1 where taille = 'XXL' AND id_prod = $2";
+		const params7 = [parseInt(req.body.XXL),id_prod];
+		let r7 = await db.queryDatabase(query7,params7);
+		// console.log("Dernier");
+
+	} catch (error) {
+		console.log("Erreur lors de update de taille");
+		
+	}
+}
 async function remplissage_commande(req){
 	try {
 		// On crée le client
@@ -302,7 +390,7 @@ server.get('/remove_item', (req, res) => {
 	const taille = req.query.taille;
 
 	
-    console.log("Arrivé et id est " +id);
+    // console.log("Arrivé et id est " +id);
 
 	for(let i = 0; i < req.session.cart.length; i++)
 	{
@@ -315,6 +403,10 @@ server.get('/remove_item', (req, res) => {
 	}
 	res.redirect("/");
 
+});
+
+server.get("/gerant", (req, res) => {
+	res.redirect("/gerant/produit");
 });
 
 server.get("/gerant/produit", async (req, res) => {
@@ -336,7 +428,8 @@ server.get("/gerant/produit/edit/:id", async (req, res) => {
         produit : produit,
 		cat : cat,
 		error : 0,
-		scat : scat
+		scat : scat,
+		taille : await db.get_qte_produit(id)
     });
 });
 
@@ -353,6 +446,7 @@ server.post("/gerant/produit/edit/:id", async (req, res) => {
 		const params = [req.body.libelle, parseFloat(req.body.prix), req.body.categorie, filename, id];
 		const query = "UPDATE produit SET libelle = $1, prix = $2, nom_scat = $3, img = $4  WHERE id_prod = $5";
 		let r = await db.queryDatabase(query,params);
+		let r2 = await update_des_tailles(req,id);
 		res.redirect("/gerant/produit");
 
 	}else{
@@ -364,7 +458,9 @@ server.post("/gerant/produit/edit/:id", async (req, res) => {
 			produit : produit,
 			cat : cat,
 			error : 1,
-			scat : scat
+			scat : scat,
+			taille : [req.body.XXS,req.body.XS,req.body.S,req.body.M,req.body.L,req.body.XL,req.body.XXL]
+
 		});
 	}
 	
@@ -381,7 +477,8 @@ server.get("/gerant/produit/create", async (req, res) => {
         produit : p,
 		cat : cat,
 		error : 0,
-		scat : scat
+		scat : scat,
+		taille : [0,0,0,0,0,0,0]
     });
 });
 
@@ -395,6 +492,7 @@ server.post("/gerant/produit/create", async (req, res) => {
 		const query = "INSERT INTO produit (libelle,prix,img,nom_scat) VALUES ($1, $2, $3, $4)";
 		const params = [req.body.libelle , parseFloat(req.body.prix), filename, req.body.categorie];
 		let r = await db.queryDatabase(query,params);
+		let r2 = await ajout_des_tailles(req);
 		res.redirect("/gerant/produit");
 
 	}else{
@@ -412,7 +510,8 @@ server.post("/gerant/produit/create", async (req, res) => {
 			produit : p,
 			error : 1,
 			cat : cat,
-			scat : scat
+			scat : scat,
+			taille : [req.body.XXS,req.body.XS,req.body.S,req.body.M,req.body.L,req.body.XL,req.body.XXL]
 		});
 		// res.redirect('back');
 	}
@@ -442,45 +541,6 @@ server.get("/valider_panier", async (req, res) => {
         qte_total_cart : get_cart_total_qte(req)
 	});
 });
-
-// server.post("/commander", async (req, res) => {
-
-// 	if(check_form_donnee(req)){
-// 		const result = await check_dispo_produit(req);
-// 		if(!result.retour){
-// 			res.render('client/saisir_donnee.ejs',{
-// 				message : result.probleme,
-// 				nom : req.body.nom,
-// 				error : 1,
-// 				prenom : req.body.prenom,
-// 				adresse : req.body.adresse,
-// 				tel : req.body.tel,
-// 				email : req.body.email,
-// 				cart : req.session.cart,
-// 				total_cart : get_cart_total(req),
-// 				qte_total_cart : get_cart_total_qte(req)
-// 			});
-// 		}
-// 		remplissage_commande(req);
-// 		res.redirect("/clear_cart");
-
-// 	}else{
-
-// 		res.render('client/saisir_donnee.ejs',{
-// 			message : 'Formulaire incorrect',
-// 			nom : req.body.nom,
-// 			error : 1,
-// 			prenom : req.body.prenom,
-// 			adresse : req.body.adresse,
-// 			tel : req.body.tel,
-// 			email : req.body.email,
-// 			cart : req.session.cart,
-// 			total_cart : get_cart_total(req),
-// 			qte_total_cart : get_cart_total_qte(req)
-// 		});
-// 	}
-	
-// });
 
 server.post("/commander", async (req, res) => {
 	let message = "";
@@ -522,6 +582,48 @@ server.post("/commander", async (req, res) => {
 		total_cart,
 		qte_total_cart,
 	});
+});
+
+server.get("/gerant/comm_non_valide", async (req, res) => {
+	const comm = await db.get_comm_non_valider();
+	res.render("gerant/commande/comm_non_valide.ejs",{
+		message : 'Voici les commandes pas encore validées',
+		comm : comm,
+		error : 0,
+	});
+});
+
+server.get("/gerant/comm_valide", async (req, res) => {
+	const comm = await db.get_comm_valider();
+	res.render("gerant/commande/comm_valide.ejs",{
+		message : 'Voici les commandes déja validées (livrées)',
+		comm : comm,
+		error : 0,
+
+	});
+});
+
+server.get("/gerant/comm/show/:id_comm", async (req, res) => {
+	const id_comm = parseInt(req.params.id_comm);
+	const produits = await db.get_produits_comm(id_comm);
+	res.render("gerant/commande/show.ejs",{
+		message : 'Voici les détails de la commande',
+		produits : produits,
+		error : 0,
+
+	});
+});
+
+server.get("/gerant/comm/valider/:id_comm", async (req, res) => {
+	const id_comm = parseInt(req.params.id_comm);
+	try {
+		const params = [id_comm];
+		const query = "UPDATE commandes SET valider = 1  WHERE id_comm = $1";
+		let r = await db.queryDatabase(query,params);
+		res.redirect("/gerant/comm_non_valide");
+	} catch (error) {
+		console.log("Erreur lors de la validation de la commande");
+	}
 });
 
 server.use((req,res) => {

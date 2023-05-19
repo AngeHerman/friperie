@@ -1,0 +1,18 @@
+<%- include('../_header.ejs') %>
+<div class="row">
+<% for (const c of comm) { %>
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h4 class="card-title">Commande <%= c.id %></h4>
+            <!-- <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> -->
+            <h5 class="card-text">Adresse : <%= c.adresse %></h5>
+            <h5 class="card-text">Mail : <%= c.mail %></h5>
+            <h5 class="card-text">Prix : <%= c.prix %></h5>
+            <a href="/gerant/comm/show/<%= c.id %>" class="card-link">Voir</a>
+        </div>
+    </div>
+
+<% } %>
+</div>
+
+<%- include('../_footer.ejs') %>

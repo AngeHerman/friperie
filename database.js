@@ -72,7 +72,7 @@ async function getSousCategories(){
 
 async function queryDatabase(query, params) {
     try {
-        await pool.connect();
+        // await pool.connect();
         const values = params;
         const result = await pool.query(query, values);
         return result.rows;
@@ -80,7 +80,7 @@ async function queryDatabase(query, params) {
         console.error(err);
         return null;
     }
-    //  finally {
+    // finally {
     //     await pool.end();
     // }
 }
@@ -92,7 +92,7 @@ async function getProduit(id){
     if(!rows){
         return null;
     }
-    console.log(rows);
+    // console.log(rows);
     let p = new Object;
     p.id = rows[0].id_prod;
     p.libelle = rows[0].libelle;
@@ -166,7 +166,6 @@ async function getQteTailleProds(){
 
 async function get_last_idcli(){
 
-    let tab = [];
     let res =  await pool.query(
         "select MAX(id_cli) as id from client"
     );
@@ -175,14 +174,99 @@ async function get_last_idcli(){
 
 async function get_last_idcomm(){
 
-    let tab = [];
     let res =  await pool.query(
         "select MAX(id_comm) as id from commandes"
     );
     return parseInt( res.rows[0].id);
 }
 
+async function get_last_idprod(){
 
+    let res =  await pool.query(
+        "select MAX(id_prod) as id from produit"
+    );
+    return parseInt( res.rows[0].id);
+}
+
+async function get_comm_non_valider(){
+
+    let tab = [];
+    let res =  await pool.query(
+        "select * FROM commandes where valider = 0"
+    );
+    for(let r of res.rows) {
+        let p = new Object;
+        p.id = r.id_comm;
+        p.adresse = r.adresse;
+        p.mail = r.mail;
+        p.prix = r.prix;
+        tab.push(p);
+    }
+    return tab;
+}
+
+async function get_comm_valider(){
+
+    let tab = [];
+    let res =  await pool.query(
+        "select * FROM commandes where valider = 1"
+    );
+    for(let r of res.rows) {
+        let p = new Object;
+        p.id = r.id_comm;
+        p.adresse = r.adresse;
+        p.mail = r.mail;
+        p.prix = r.prix;
+        tab.push(p);
+    }
+    return tab;
+}
+
+async function get_produits_comm(id_comm){
+    let tab = [];
+    const query = "select * from produit natural join comm_prod where id_comm = $1"
+    let rows = await queryDatabase(query,[id_comm]);
+    if(!rows){
+        return null;
+    }
+    for(let r of rows) {
+        let p = new Object;
+        p.img = r.img;
+        p.libelle = r.libelle;
+        p.qte = r.qte;
+        p.taille = r.taille;
+        p.prix = r.prix;
+        tab.push(p);
+    }
+    return tab;
+}
+
+async function get_qte_produit(id_prod){
+    let tab = [0,0,0,0,0,0,0]
+    const query = "select * from taille_prod where id_prod = $1"
+    let rows = await queryDatabase(query,[id_prod]);
+    if(!rows){
+        return null;
+    }
+    for(let r of rows) {
+        if(r.taille === "XXS"){
+            tab[0] = r.qte;
+        }else if(r.taille === "XS"){
+            tab[1] = r.qte;
+        }else if(r.taille === "S"){
+            tab[2] = r.qte;
+        }else if(r.taille === "M"){
+            tab[3] = r.qte;
+        }else if(r.taille === "L"){
+            tab[4] = r.qte;
+        }else if(r.taille === "XL"){
+            tab[5] = r.qte;
+        }else if(r.taille === "XXL"){
+            tab[6] = r.qte;
+        }
+    }
+    return tab;
+}
 
 function hello( n) {
     hehe("Monsieur, Madame");
@@ -192,5 +276,6 @@ function hehe(n){
     console.log("Bienvenu "+n);
 }
 
-module.exports = {hello,getProduits,getCategories,getSousCategories,getProduit,getCombinaisons,getCatCombinaisons,getProdCombinaisons,queryDatabase,getQteTailleProds,get_last_idcli,
-get_last_idcomm};
+module.exports = {hello,getProduits,getCategories,getSousCategories,getProduit,getCombinaisons,
+    getCatCombinaisons,getProdCombinaisons,queryDatabase,getQteTailleProds,get_last_idcli,
+    get_last_idcomm,get_comm_non_valider,get_comm_valider,get_produits_comm,get_qte_produit,get_last_idprod};
