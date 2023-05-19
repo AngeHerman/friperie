@@ -102,6 +102,37 @@ async function getProduit(id){
     return p;
 }
 
+async function getAccessoires(){
+    let tab = [];
+    let res =  await pool.query(
+        "select * from accessoire"
+    );
+    for(let r of res.rows) {
+        let p = new Object;
+        p.idacc = r.id_acc;
+        p.nom = r.nom;
+        p.prix = r.prix;
+        tab.push(p);
+    }
+    return tab;
+}
+
+async function getAccessoire(id){
+
+    const sql = "SELECT * FROM accessoire WHERE id_acc = $1";
+    let rows = await queryDatabase(sql,[id]);
+    if(!rows){
+        return null;
+    }
+    // console.log(rows);
+    let p = new Object;
+    p.id = rows[0].id_acc;
+    p.nom = rows[0].nom;
+    p.prix = rows[0].prix;
+    p.img = rows[0].img;
+    return p;
+}
+
 async function getCatCombinaisons(){
 
     let tab = [];
@@ -278,4 +309,5 @@ function hehe(n){
 
 module.exports = {hello,getProduits,getCategories,getSousCategories,getProduit,getCombinaisons,
     getCatCombinaisons,getProdCombinaisons,queryDatabase,getQteTailleProds,get_last_idcli,
-    get_last_idcomm,get_comm_non_valider,get_comm_valider,get_produits_comm,get_qte_produit,get_last_idprod};
+    get_last_idcomm,get_comm_non_valider,get_comm_valider,get_produits_comm,get_qte_produit,
+    getAccessoires,getAccessoire,get_last_idprod};

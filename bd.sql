@@ -46,7 +46,7 @@ CREATE TABLE taille_prod(
     id_prod int,
     qte int,
     FOREIGN KEY (taille) REFERENCES taille(taille),
-    FOREIGN KEY (id_prod) REFERENCES produit(id_prod),
+    FOREIGN KEY (id_prod) REFERENCES produit(id_prod) ON DELETE CASCADE,
     PRIMARY KEY (id_prod,taille)
 
 );
@@ -54,6 +54,8 @@ CREATE TABLE taille_prod(
 
 CREATE  TABLE accessoire(
     id_acc serial PRIMARY KEY,
+    prix int,
+    img VARCHAR(100),
     nom VARCHAR(30)
 );
 

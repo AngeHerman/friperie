@@ -50,6 +50,23 @@ function check_form_produit(req){
 
 }
 
+function check_form_accessoire(req){
+	// console.log(req.files);
+	// console.log("file size est "+req.files.file.size);
+	// console.log("req.body.libelle.length est "+req.body.libelle.length);
+	// console.log("req.body.categorie.length est "+req.body.categorie.length);
+	// console.log("Number.isFinite(req.body.prix) est "+Number.isFinite( parseFloat(req.body.prix)));
+
+
+	if (req.body.libelle.length == 0 || !Number.isFinite(parseFloat(req.body.prix)) ||
+		req.files.file.size == 0){
+		return false;
+	}else{
+		return true;
+	}
+
+}
+
 function check_form_produit_sauf_img(req){
 
 	if (req.body.libelle.length == 0 || req.body.categorie.length == 0 || 
@@ -57,6 +74,16 @@ function check_form_produit_sauf_img(req){
 		!estEntier(req.body.XXS) || !estEntier(req.body.XS) || !estEntier(req.body.S) ||
 		!estEntier(req.body.M) || !estEntier(req.body.L) || !estEntier(req.body.XL)
 		|| !estEntier(req.body.XXL)){
+		return false;
+	}else{
+		return true;
+	}
+
+}
+
+function check_form_accessoire_sauf_img(req){
+
+	if (req.body.libelle.length == 0 || !Number.isFinite(parseFloat(req.body.prix))){
 		return false;
 	}else{
 		return true;
@@ -76,7 +103,7 @@ function check_form_donnee(req){
 }
 
 async function check_dispo_produit(req){
-	let prob = "Certains produit ne sont plus disponibles, les voicis ainsi que leur disponibilités ...";
+	let prob = "Certains produit ne sont plus disponibles, les voici ainsi que leur disponibilités ...";
 	let ret = true;
 	qte_taille = await db.getQteTailleProds();
 	req.session.cart.forEach(async (p_cart) => {
@@ -414,6 +441,34 @@ server.get("/gerant/produit", async (req, res) => {
 	res.render('gerant/produit/welcome.ejs',{
         message : 'Bienvenue Gérant',
         produits : produits,
+		combi : false,
+		acc : false,
+		error : 0
+    });
+});
+
+server.get("/gerant/accessoires", async (req, res) => {
+    const produits = await db.getAccessoires();
+	res.render('gerant/produit/welcome.ejs',{
+        message : 'Bienvenue Gérant',
+        produits : produits,
+		combi : false,
+		acc : true,
+		error : 0
+    });
+});
+
+server.get("/gerant/combinaisons", async (req, res) => {
+	const produits = await db.getProduits();
+    const combinaisons = await db.getCombinaisons();
+	const prod_combi = await db.getProdCombinaisons();
+	res.render('gerant/produit/welcome.ejs',{
+        message : 'Bienvenue Gérant',
+		combinaisons : combinaisons,
+        produits : produits,
+		prod_combi : prod_combi,
+		combi : true,
+		acc : false,
 		error : 0
     });
 });
@@ -427,6 +482,8 @@ server.get("/gerant/produit/edit/:id", async (req, res) => {
         message : 'Modification de produit',
         produit : produit,
 		cat : cat,
+		combi : false,
+		acc : false,
 		error : 0,
 		scat : scat,
 		taille : await db.get_qte_produit(id)
@@ -456,11 +513,51 @@ server.post("/gerant/produit/edit/:id", async (req, res) => {
 		res.render('gerant/produit/edit.ejs',{
 			message : 'Formulaire incorrect',
 			produit : produit,
+			combi : false,
+			acc : true,
 			cat : cat,
 			error : 1,
 			scat : scat,
 			taille : [req.body.XXS,req.body.XS,req.body.S,req.body.M,req.body.L,req.body.XL,req.body.XXL]
 
+		});
+	}
+	
+});
+
+server.get("/gerant/accessoires/edit/:id", async (req, res) => {
+	const id = parseInt(req.params.id);
+	const produit = await db.getAccessoire(id);
+	res.render('gerant/produit/edit.ejs',{
+        message : "Modification d'accessoire",
+        produit : produit,
+		combi : false,
+		acc : true,
+		error : 0,
+    });
+});
+
+server.post("/gerant/accessoires/edit/:id", async (req, res) => {
+	const file = req.files.file;
+	let filename = file.path.substring(11);
+
+	if(check_form_accessoire_sauf_img(req)){
+		if(req.files.file.size == 0){
+			filename = req.body.filename;
+		}
+		const id = parseInt(req.params.id);
+		const params = [req.body.libelle, parseFloat(req.body.prix), filename, id];
+		const query = "UPDATE accessoire SET nom = $1, prix = $2, img = $3  WHERE id_acc = $4";
+		let r = await db.queryDatabase(query,params);
+		res.redirect("/gerant/accessoires");
+	}else{
+		const produit = await db.getAccessoire(parseInt(req.params.id));
+		res.render('gerant/produit/edit.ejs',{
+			message : 'Formulaire incorrect',
+			combi : false,
+			acc : true,
+			produit : produit,
+			error : 1,
 		});
 	}
 	
@@ -475,9 +572,42 @@ server.get("/gerant/produit/create", async (req, res) => {
 	res.render('gerant/produit/create.ejs',{
         message : 'Ajout de produit',
         produit : p,
+		combi : false,
+		acc : false,
 		cat : cat,
 		error : 0,
 		scat : scat,
+		taille : [0,0,0,0,0,0,0]
+    });
+});
+
+server.get("/gerant/accessoires/create", async (req, res) => {
+	let p = new Object;
+    p.img = "";
+	res.render('gerant/produit/create.ejs',{
+        message : "Ajout d'accessoire",
+        produit : p,
+		combi : false,
+		acc : true,
+		error : 0,
+		taille : [0,0,0,0,0,0,0]
+    });
+});
+
+server.get("/gerant/combinaisons/create", async (req, res) => {
+	const cat = await db.getCatCombinaisons();
+	const combinaisons = await db.getCombinaisons();
+	const produits = await db.getProduits();
+	let p = new Object;
+    p.categorie = "Homme";
+    p.img = "";
+	res.render('gerant/produit/create.ejs',{
+        message : 'Ajout de combinaison',
+        produit : p,
+		combi :true,
+		acc : false,
+		cat : cat,
+		error : 0,
 		taille : [0,0,0,0,0,0,0]
     });
 });
@@ -509,13 +639,43 @@ server.post("/gerant/produit/create", async (req, res) => {
 			message : 'Formulaire Incorrect',
 			produit : p,
 			error : 1,
+			combi : false,
+			acc : false,
 			cat : cat,
 			scat : scat,
 			taille : [req.body.XXS,req.body.XS,req.body.S,req.body.M,req.body.L,req.body.XL,req.body.XXL]
 		});
 		// res.redirect('back');
 	}
-	
+});
+
+server.post("/gerant/accessoires/create", async (req, res) => {
+	const file = req.files.file;
+	// console.log(file.name);
+	let filename = file.path.substring(11);
+	// console.log(filename);
+	// console.log(check_form_produit(req));
+	if(check_form_accessoire(req)){
+		const query = "INSERT INTO accessoire (nom,prix,img) VALUES ($1, $2, $3)";
+		const params = [req.body.libelle , parseFloat(req.body.prix), filename];
+		let r = await db.queryDatabase(query,params);
+		res.redirect("/gerant/accessoires");
+
+	}else{
+		console.log("Arrivé dans problème "+ req.files.file.name);
+		let p = new Object;
+		p.img = req.files.file.name;
+		p.prix = req.body.prix;
+		p.libelle = req.body.libelle;
+		res.render('gerant/produit/create.ejs',{
+			message : 'Formulaire Incorrect',
+			produit : p,
+			combi : false,
+			acc : true,
+			error : 1
+		});
+		// res.redirect('back');
+	}
 });
 
 server.get("/gerant/produit/delete/:id", async (req, res) => {
@@ -526,6 +686,16 @@ server.get("/gerant/produit/delete/:id", async (req, res) => {
 	console.log(r);
 	res.redirect("/gerant/produit");
 });
+
+server.get("/gerant/accessoires/delete/:id", async (req, res) => {
+	const id = parseInt(req.params.id);
+	const query = "DELETE FROM accessoire WHERE id_acc = $1";
+	const params = [id];
+	let r = await db.queryDatabase(query,params);
+	console.log(r);
+	res.redirect("/gerant/accessoires");
+});
+
 
 server.get("/valider_panier", async (req, res) => {
 	res.render('client/saisir_donnee.ejs',{
