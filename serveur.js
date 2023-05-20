@@ -67,6 +67,17 @@ function check_form_accessoire(req){
 
 }
 
+function check_form_combinaisons(req){
+	if (req.body.nom.length == 0 || !Number.isFinite(parseFloat(req.body.prix)) ||
+	req.body.categorie.length == 0 || req.body.produit1 == "None"  || 
+	req.body.taille.length == 0){
+		return false;
+	}else{
+		return true;
+	}
+
+}
+
 function check_form_produit_sauf_img(req){
 
 	if (req.body.libelle.length == 0 || req.body.categorie.length == 0 || 
@@ -130,6 +141,89 @@ function get_cart_total_qte(req){
         total += produit.qte;
     });
     return total;
+}
+
+async function ajoutProdCombi(req){
+	try {
+		let id_combi = await db.get_last_idcombi();
+
+		const produits = await db.getProduits();
+		const query = "INSERT INTO produit_combi(id_prod,id_combi) values($1,$2)";
+		if(req.body.produit1 != "None") {
+			for(const p of produits){
+				if(p.libelle == req.body.produit1){
+					const params = [p.id, id_combi];
+					let r1 = await db.queryDatabase(query,params);
+				}
+			}
+		}
+		if(req.body.produit2 != "None") {
+			for(const p of produits){
+				if(p.libelle == req.body.produit2){
+					const params = [p.id, id_combi];
+					let r1 = await db.queryDatabase(query,params);
+				}
+			}
+		}
+		if(req.body.produit3 != "None") {
+			for(const p of produits){
+				if(p.libelle == req.body.produit3){
+					const params = [p.id, id_combi];
+					let r1 = await db.queryDatabase(query,params);
+				}
+			}
+		}
+	}catch (error) {
+		console.log("Erreur lors de ajout de produit de combinaison");
+		
+	}
+}
+
+async function update_des_produits_combinaison(req, id_combi){
+	try {
+		const produits = await db.getProduits();
+		const insertquery = "INSERT INTO produit_combi (id_prod, id_combi) VALUES ($1, $2)";
+		const updatequery = "UPDATE produit_combi set id_prod = $1 where id_combi = $2";
+		if(req.body.produit1 != "None") {
+			for(const p of produits){
+				if(p.libelle == req.body.produit1){
+					const params = [p.id, id_combi];
+					try{
+						await db.queryDatabase(updatequery,params);
+					}catch (error){
+						await db.queryDatabase(insertquery,params);
+					}
+				}
+			}
+		}
+		if(req.body.produit2 != "None") {
+			for(const p of produits){
+				if(p.libelle == req.body.produit2){
+					const params = [p.id, id_combi];
+					try{
+						await db.queryDatabase(updatequery,params);
+					}catch (error){
+						await db.queryDatabase(insertquery,params);
+					}
+				}
+			}
+		}
+		if(req.body.produit3 != "None") {
+			for(const p of produits){
+				if(p.libelle == req.body.produit3){
+					const params = [p.id, id_combi];
+					try{
+						await db.queryDatabase(updatequery,params);
+					}catch (error){
+						await db.queryDatabase(insertquery,params);
+					}				
+				}
+			}
+		}
+	} catch (error) {
+		console.log("Erreur lors de update de taille");
+		
+	}
 }
 
 async function ajout_des_tailles(req){
@@ -534,6 +628,7 @@ server.get("/gerant/accessoires/edit/:id", async (req, res) => {
 		combi : false,
 		acc : true,
 		error : 0,
+		qte : await db.get_qte_accessoire(id)
     });
 });
 
@@ -546,8 +641,8 @@ server.post("/gerant/accessoires/edit/:id", async (req, res) => {
 			filename = req.body.filename;
 		}
 		const id = parseInt(req.params.id);
-		const params = [req.body.libelle, parseFloat(req.body.prix), filename, id];
-		const query = "UPDATE accessoire SET nom = $1, prix = $2, img = $3  WHERE id_acc = $4";
+		const params = [req.body.libelle, parseFloat(req.body.prix), filename, parseInt(req.body.qte),id];
+		const query = "UPDATE accessoire SET nom = $1, prix = $2, img = $3, qte = $4 WHERE id_acc = $5";
 		let r = await db.queryDatabase(query,params);
 		res.redirect("/gerant/accessoires");
 	}else{
@@ -558,6 +653,71 @@ server.post("/gerant/accessoires/edit/:id", async (req, res) => {
 			acc : true,
 			produit : produit,
 			error : 1,
+			qte : [req.body.qte]
+		});
+	}
+	
+});
+
+server.get("/gerant/combinaisons/edit/:id", async (req, res) => {
+	const id = parseInt(req.params.id);
+	const prod_combi = await db.getProdCombinaisons();
+	const produit = await db.getCombinaison(id);
+	const produits = await db.getProduits();
+	const cat = await db.getCatCombinaisons();
+	const taille = await db.getTaille();
+	let p = new Object;
+	p.id = produit.id;
+	p.nom = produit.nom;
+	p.categorie = produit.categorie;
+	p.prix = produit.prix;
+	let tab = await db.getTabProdCombi(id);
+	p.libelle = tab;
+	p.taille = produit.taille;
+	res.render('gerant/produit/edit.ejs',{
+        message : "Modification de combinaison",
+        produit : p,
+		list_produits : produits,
+		prod_combi : prod_combi,
+		combi : true,
+		acc : false,
+		cat : cat,
+		list_taille : taille,
+		error : 0
+    });
+});
+
+server.post("/gerant/combinaisons/edit/:id", async (req, res) => {
+	if(check_form_combinaisons(req)){
+		const id = parseInt(req.params.id);
+		const params = [req.body.nom, req.body.categorie ,parseFloat(req.body.prix), req.body.taille,id];
+		const query = "UPDATE combinaison SET nom = $1, nom_cat_combi = $2, prix = $3, taille = $4 WHERE id_combi = $5";
+		let r = await db.queryDatabase(query,params);
+		let r2 = await update_des_produits_combinaison(req,id);
+		res.redirect("/gerant/combinaisons");
+	}else{
+		const produit = await db.getCombinaison(id);
+		const produits = await db.getProduits();
+		const cat = await db.getCatCombinaisons();
+		const prod_combi = await db.getProdCombinaisons();
+		const taille = await db.getTaille();
+		let p = new Object;
+		p.nom = produit.nom;
+		p.categorie = produit.categorie;
+		p.prix = produit.prix;
+		let tab = await db.getTabProdCombi(id);
+		p.libelle = tab;
+		p.taille = produit.taille;
+		res.render('gerant/produit/edit.ejs',{
+			message : 'Formulaire incorrect',
+			combi : true,
+			list_produits : produits,
+			prod_combi : prod_combi,
+			list_taille : taille,
+			cat : cat,
+			acc : false,
+			produit : p,
+			error : 1
 		});
 	}
 	
@@ -590,25 +750,29 @@ server.get("/gerant/accessoires/create", async (req, res) => {
 		combi : false,
 		acc : true,
 		error : 0,
-		taille : [0,0,0,0,0,0,0]
+		qte : [0]
     });
 });
 
 server.get("/gerant/combinaisons/create", async (req, res) => {
 	const cat = await db.getCatCombinaisons();
-	const combinaisons = await db.getCombinaisons();
 	const produits = await db.getProduits();
+	const combinaisons = await db.getCombinaisons();
+	const taille = await db.getTaille();
 	let p = new Object;
     p.categorie = "Homme";
-    p.img = "";
+	p.libelle = ["None","None","None"];
+	p.taille = "XXS";
 	res.render('gerant/produit/create.ejs',{
         message : 'Ajout de combinaison',
         produit : p,
 		combi :true,
 		acc : false,
 		cat : cat,
+		combinaisons : combinaisons,
 		error : 0,
-		taille : [0,0,0,0,0,0,0]
+		list_produits : produits,
+		list_taille : taille
     });
 });
 
@@ -656,8 +820,8 @@ server.post("/gerant/accessoires/create", async (req, res) => {
 	// console.log(filename);
 	// console.log(check_form_produit(req));
 	if(check_form_accessoire(req)){
-		const query = "INSERT INTO accessoire (nom,prix,img) VALUES ($1, $2, $3)";
-		const params = [req.body.libelle , parseFloat(req.body.prix), filename];
+		const query = "INSERT INTO accessoire (nom,prix,img,qte) VALUES ($1, $2, $3, $4)";
+		const params = [req.body.libelle , parseFloat(req.body.prix), filename , parseInt(req.body.qte)];
 		let r = await db.queryDatabase(query,params);
 		res.redirect("/gerant/accessoires");
 
@@ -672,7 +836,43 @@ server.post("/gerant/accessoires/create", async (req, res) => {
 			produit : p,
 			combi : false,
 			acc : true,
-			error : 1
+			error : 1,
+			qte : [req.body.qte]
+		});
+		// res.redirect('back');
+	}
+});
+
+server.post("/gerant/combinaisons/create", async (req, res) => {
+	if(check_form_combinaisons(req)){
+		const query = "INSERT INTO combinaison (nom,nom_cat_combi,prix,taille) VALUES ($1, $2, $3, $4)";
+		const params = [req.body.nom , req.body.categorie, parseFloat(req.body.prix), req.body.taille];
+		let r = await db.queryDatabase(query,params);
+		let r2 = await ajoutProdCombi(req);
+		res.redirect("/gerant/combinaisons");
+	}else{
+		console.log("Arrivé dans problème "+req.body.produit1);
+		const cat = await db.getCatCombinaisons();
+		const produits = await db.getProduits();
+		const combinaisons = await db.getCombinaisons();
+		const taille = await db.getTaille();
+		let p = new Object;
+		p.nom = req.body.nom;
+		p.categorie = req.body.categorie;
+		p.prix = req.body.prix;
+		p.taille = req.body.taille;
+		p.libelle = [req.body.produit1,req.body.produit2,req.body.produit3]
+		res.render('gerant/produit/create.ejs',{
+			message : 'Formulaire Incorrect',
+			produit : p,
+			error : 1,
+			combi : true,
+			acc : false,
+			cat : cat,
+			combinaisons : combinaisons,
+			list_produits : produits,
+			list_taille : taille,
+			taille : [req.body.taille]
 		});
 		// res.redirect('back');
 	}
@@ -683,7 +883,6 @@ server.get("/gerant/produit/delete/:id", async (req, res) => {
 	const query = "DELETE FROM produit WHERE id_prod = $1";
 	const params = [id];
 	let r = await db.queryDatabase(query,params);
-	console.log(r);
 	res.redirect("/gerant/produit");
 });
 
@@ -692,8 +891,15 @@ server.get("/gerant/accessoires/delete/:id", async (req, res) => {
 	const query = "DELETE FROM accessoire WHERE id_acc = $1";
 	const params = [id];
 	let r = await db.queryDatabase(query,params);
-	console.log(r);
 	res.redirect("/gerant/accessoires");
+});
+
+server.get("/gerant/combinaisons/delete/:id", async (req, res) => {
+	const id = parseInt(req.params.id);
+	const query = "DELETE FROM combinaison WHERE id_combi = $1";
+	const params = [id];
+	let r = await db.queryDatabase(query,params);
+	res.redirect("/gerant/combinaisons");
 });
 
 

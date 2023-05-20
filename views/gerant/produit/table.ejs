@@ -15,6 +15,7 @@
                     <th>Produits</th>
                     <th>Prix</th>
                     <th>Categorie</th>
+                    <th>Taille</th>
                     <th class="d-print-none">
                         <a class="btn btn-sm btn-success" href="/gerant/combinaisons/create">Ajouter</a>
                     </th>
@@ -53,6 +54,7 @@
                     </td>
                     <td><%= combinaisons[p].prix %></td>
                     <td><%= combinaisons[p].nom_cat_combi %></td>
+                    <td><%= combinaisons[p].taille %></td>
                     <td class="d-print-none">
                         <a class="btn btn-sm btn-warning" href="/gerant/combinaisons/edit/<%= combinaisons[p].idcombi %>">Modifier</a>
                         <a class="btn btn-sm btn-danger" href="/gerant/combinaisons/delete/<%= combinaisons[p].idcombi %>" onclick="return confirm('Confirmer la suppression ?')">Effacer</a>

@@ -56,6 +56,7 @@ CREATE  TABLE accessoire(
     id_acc serial PRIMARY KEY,
     prix int,
     img VARCHAR(100),
+    qte int,
     nom VARCHAR(30)
 );
 
@@ -72,10 +73,12 @@ CREATE TABLE cat_combi(
 );
 
 CREATE TABLE combinaison(
-    id_combi serial PRIMARY KEY,
+    id_combi serial PRIMARY KEY ,
     nom VARCHAR(30),
     nom_cat_combi VARCHAR(30),
     prix int,
+    taille VARCHAR(5),
+    FOREIGN KEY (taille) REFERENCES taille(taille),
     FOREIGN KEY (nom_cat_combi) REFERENCES cat_combi(nom_cat_combi)   
 );
 
@@ -83,7 +86,7 @@ CREATE TABLE produit_combi(
     id_prod int,
     id_combi int,
     FOREIGN KEY (id_prod) REFERENCES produit(id_prod),
-    FOREIGN KEY (id_combi) REFERENCES combinaison(id_combi),
+    FOREIGN KEY (id_combi) REFERENCES combinaison(id_combi) ON DELETE CASCADE,
     PRIMARY KEY (id_prod,id_combi)
 );
 
@@ -280,9 +283,9 @@ INSERT INTO cat_combi(nom_cat_combi) values
 ('Homme'),
 ('Femme');
 
-INSERT INTO combinaison(id_combi,nom,nom_cat_combi,prix) values
-(1,'Sport','Homme',50),
-(2,'Classique','Femme',80);
+INSERT INTO combinaison(nom,nom_cat_combi,prix,taille) values
+('Sport','Homme',50,'XS'),
+('Classique','Femme',80,'S');
 
 INSERT INTO produit_combi(id_prod,id_combi) values
 (3,1),
