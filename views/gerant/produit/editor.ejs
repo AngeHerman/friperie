@@ -74,15 +74,15 @@ if (acc){%>
         <div class="col-sm-10">   
             <%for (var i = 1;i<=3;i++){%>
                 <select name="produit<%=i%>">
-                <% if (produit.libelle+i == "None"){%>
-                    <option selected="selected" value = "<%= null %>">None</option>
-                <%} else {%>
-                    <option selected="selected" value = "<%= produit.libelle[i-1] %>"><%= produit.libelle[i-1] %></option>
-                <%} 
-                for (const p of list_produits) {%> 
-                    <option value = "<%= p.libelle %>"><%= p.libelle %></option>
-                <%} %>
-            </select>
+                    <option value="<%= null %>" <% if (produit.libelle[i-1] === "None") { %> selected <% } %>>None</option>
+                    <% for (const p of list_produits) { %>
+                        <% if (produit.libelle[i-1] === p.libelle) { %>
+                            <option selected="selected" value="<%= p.libelle %>"><%= p.libelle %></option>
+                        <% } else { %>
+                            <option value="<%= p.libelle %>"><%= p.libelle %></option>
+                        <% } %>
+                    <% } %>
+                </select>
             <%}%>
         </div>
     </div>

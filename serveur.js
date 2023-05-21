@@ -182,17 +182,14 @@ async function ajoutProdCombi(req){
 async function update_des_produits_combinaison(req, id_combi){
 	try {
 		const produits = await db.getProduits();
+		const remove_prod = "DELETE FROM produit_combi WHERE id_combi = $1";
+		let r = await db.queryDatabase(remove_prod,[id_combi]);
 		const insertquery = "INSERT INTO produit_combi (id_prod, id_combi) VALUES ($1, $2)";
-		const updatequery = "UPDATE produit_combi set id_prod = $1 where id_combi = $2";
 		if(req.body.produit1 != "None") {
 			for(const p of produits){
 				if(p.libelle == req.body.produit1){
 					const params = [p.id, id_combi];
-					try{
-						await db.queryDatabase(updatequery,params);
-					}catch (error){
-						await db.queryDatabase(insertquery,params);
-					}
+					await db.queryDatabase(insertquery,params);
 				}
 			}
 		}
@@ -200,11 +197,7 @@ async function update_des_produits_combinaison(req, id_combi){
 			for(const p of produits){
 				if(p.libelle == req.body.produit2){
 					const params = [p.id, id_combi];
-					try{
-						await db.queryDatabase(updatequery,params);
-					}catch (error){
-						await db.queryDatabase(insertquery,params);
-					}
+					await db.queryDatabase(insertquery,params);
 				}
 			}
 		}
@@ -212,11 +205,7 @@ async function update_des_produits_combinaison(req, id_combi){
 			for(const p of produits){
 				if(p.libelle == req.body.produit3){
 					const params = [p.id, id_combi];
-					try{
-						await db.queryDatabase(updatequery,params);
-					}catch (error){
-						await db.queryDatabase(insertquery,params);
-					}				
+					await db.queryDatabase(insertquery,params);			
 				}
 			}
 		}

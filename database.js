@@ -152,7 +152,7 @@ async function getCombinaison(id){
 }
 
 async function getTabProdCombi(id){
-    let tab = []
+    let tab = [];
     const sql = "SELECT * FROM produit_combi WHERE id_combi = $1";
     let rows = await queryDatabase(sql,[id]);
     if(!rows){
