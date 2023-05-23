@@ -38,7 +38,7 @@ function check_form_produit(req){
 
 
 	if (req.body.libelle.length == 0 || req.body.categorie.length == 0 || 
-		!/^\d+(\.\d+)?$/.test(req.body.prix) || req.files.file.size == 0 ||
+		!Number.isFinite(parseFloat(req.body.prix)) || req.files.file.size == 0 ||
 		!estEntier(req.body.XXS) || !estEntier(req.body.XS) || !estEntier(req.body.S) ||
 		!estEntier(req.body.M) || !estEntier(req.body.L) || !estEntier(req.body.XL)
 		|| !estEntier(req.body.XXL)
@@ -58,7 +58,7 @@ function check_form_accessoire(req){
 	// console.log("Number.isFinite(req.body.prix) est "+Number.isFinite( parseFloat(req.body.prix)));
 
 
-	if (req.body.libelle.length == 0 || !/^\d+(\.\d+)?$/.test(req.body.prix) ||
+	if (req.body.libelle.length == 0 || !Number.isFinite(parseFloat(req.body.prix)) ||
 		req.files.file.size == 0){
 		return false;
 	}else{
@@ -68,7 +68,7 @@ function check_form_accessoire(req){
 }
 
 function check_form_combinaisons(req){
-	if (req.body.nom.length == 0 || !/^\d+(\.\d+)?$/.test(req.body.prix) ||
+	if (req.body.nom.length == 0 || !Number.isFinite(parseFloat(req.body.prix)) ||
 	req.body.categorie.length == 0 || req.body.produit1.length == 0  || 
 	req.body.taille.length == 0){
 		return false;
@@ -81,7 +81,7 @@ function check_form_combinaisons(req){
 function check_form_produit_sauf_img(req){
 
 	if (req.body.libelle.length == 0 || req.body.categorie.length == 0 || 
-		!/^\d+(\.\d+)?$/.test(req.body.prix) ||
+		!Number.isFinite(parseFloat(req.body.prix)) ||
 		!estEntier(req.body.XXS) || !estEntier(req.body.XS) || !estEntier(req.body.S) ||
 		!estEntier(req.body.M) || !estEntier(req.body.L) || !estEntier(req.body.XL)
 		|| !estEntier(req.body.XXL)){
@@ -93,8 +93,9 @@ function check_form_produit_sauf_img(req){
 }
 
 function check_form_accessoire_sauf_img(req){
-
-	if (req.body.libelle.length == 0 || !/^\d+(\.\d+)?$/.test(req.body.prix)){
+	console.log("prix est" +req.body.prix);
+	console.log("prix 2 est fini "+!Number.isFinite(parseFloat(req.body.prix)));
+	if (req.body.libelle.length == 0 || !Number.isFinite(parseFloat(req.body.prix))){
 		return false;
 	}else{
 		return true;
@@ -802,7 +803,6 @@ server.post("/gerant/produit/create", async (req, res) => {
 		let r = await db.queryDatabase(query,params);
 		let r2 = await ajout_des_tailles(req);
 		res.redirect("/gerant/produit");
-
 	}else{
 		console.log("Arrivé dans problème "+ req.files.file.name);
 

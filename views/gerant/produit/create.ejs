@@ -1,18 +1,6 @@
 <%- include('../_header.ejs') %>
 
 
-
-<!-- <form action="/gerant/produit/create" method="post" enctype="multipart/form-data">
-  <input type="file" name="file">
-  <input class="form-control" name="prix" />
-  <input class="form-control" name="pri" />
-
-  <input class="form-control" name="pix" />
-
-  <input class="form-control" name="prx" />
-
-  <button type="submit">Upload</button>
-</form> -->
 <% if(combi){%>
   <form action="/gerant/combinaisons/create" method="post" enctype="multipart/form-data">
 <%} else if(acc){%>
