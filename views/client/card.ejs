@@ -26,8 +26,7 @@
                                 <div class="card-body">
                                     <h6 class="card-title"><%= combinaisons[i].nom %></h6>
                                     <p>Prix : <%= combinaisons[i].prix %></p>
-                                    <p>categorie : <%= combinaisons[i].nom_cat_combi %></p>
-                                    <p>Id : <%= combinaisons[i].idcombi %></p>
+                                    <p>Categorie : <%= combinaisons[i].nom_cat_combi %></p>
 
                                     <form action="" method="POST">
                                         <input type="hidden" value="<%= produits[i].id %>" name="id">
@@ -38,18 +37,6 @@
 
                                         <div class="card-footer h-25" style="background-color: white;">
                                             <div class="row">
-                                                <div class="col">
-                                                    <% if(produits[i].qte == 0){%>
-
-                                                        <button class="btn btn-danger btn-sm" disabled class="tooltip-test" title="add to cart" type ="submit">
-                                                            <i class="fa fa-shopping-cart"></i> Rupture de stock pour le moment
-                                                        </button>
-                                                        <% }else{%> 
-                                                        <button class="btn btn-secondary btn-sm" class="tooltip-test" title="add to cart" type ="submit">
-                                                            <i class="fa fa-shopping-cart"></i> ajouter au panier
-                                                        </button>
-                                                    <% }%> 
-                                                </div>
                                                 <% if(produits[i].qte != 0){%>
 
                                                     <div class="col">
@@ -74,9 +61,19 @@
                                                 <% }%> 
                                             </div>
                                         </div>
-
+                                        <div class="col">
+                                            <a href="" class="btn btn-outline-primary"><i class="far fa-eye"></i></a>
+                                            <% if(produits[i].qte == 0){%>
+                                                <button class="btn btn-danger btn-sm" disabled class="tooltip-test" title="add to cart" type ="submit">
+                                                    <i class="fa fa-shopping-cart"></i> Rupture de stock pour le moment
+                                                </button>
+                                                <% }else{%> 
+                                                <button class="btn btn-secondary btn-sm" class="tooltip-test" title="add to cart" type ="submit">
+                                                    <i class="fa fa-shopping-cart"></i> ajouter au panier
+                                                </button>
+                                            <% }%> 
+                                        </div>
                                     </form>
-                                    <a href="" class="btn btn-outline-primary"><i class="far fa-eye"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -91,13 +88,12 @@
                             <div class="card h-100 shadow" style="margin-bottom: 20px; height: auto;">
                                     <img src="/img/<%= produits[i].img %>" alt=""
                                         class="card-img-top mx-auto"
-                                        style="height: 260px; width: 250px;display: block;"
+                                        style="height: 260px; width: 250px;display: block; padding-top: 5px;"
                                     >
                                 <div class="card-body">
                                     <h6 class="card-title"><%= produits[i].libelle %></h6>
                                     <p>Prix : <%= produits[i].prix %></p>
-                                    <p>categorie : <%= produits[i].categorie %></p>
-                                    <p>Id : <%= produits[i].id %></p>
+                                    <p>Categorie : <%= produits[i].categorie %></p>
 
                                     <form action="http://localhost:8080/add_cart" method="POST">
                                         <input type="hidden" value="<%= produits[i].id %>" name="id">
@@ -107,18 +103,6 @@
                                         <input type="hidden" value="<%= produits[i].categorie %>" id="slug" name="categorie">
                                         <div class="card-footer h-25" style="background-color: white;">
                                             <div class="row">
-                                                <div class="col">
-                                                    <% if(produits[i].qte == 0){%>
-
-                                                        <button class="btn btn-danger btn-sm" disabled class="tooltip-test" title="add to cart" type ="submit">
-                                                            <i class="fa fa-shopping-cart"></i> Rupture de stock pour le moment
-                                                        </button>
-                                                        <% }else{%> 
-                                                        <button class="btn btn-secondary btn-sm" class="tooltip-test" title="add to cart" type ="submit">
-                                                            <i class="fa fa-shopping-cart"></i> ajouter au panier
-                                                        </button>
-                                                    <% }%> 
-                                                </div>
                                                 <% if(produits[i].qte != 0){%>
 
                                                     <div class="col">
@@ -137,15 +121,33 @@
                                                             <option value="S">S</option>
                                                             <option value="XS">XS</option>
                                                             <option value="XXS">XXS</option>
-
                                                         </select>
                                                     </div>
                                                 <% }%> 
                                             </div>
+                                            <div class="col">
+                                                <span>Accessoire :</span>
+                                                <select class="form-control" name="acc" >
+                                                    <option value="<%= null %>">Aucun</option>
+                                                    <% for (const a of produits[i].accessoires) { %>
+                                                        <option value="<%= a.id_acc %>"><%= a.nom_acc %></option>
+                                                    <%}%>
+                                                </select>
+                                            </div>
                                         </div>
-
+                                        <div class="col">
+                                            <a href="" class="btn btn-outline-primary"><i class="far fa-eye"></i></a>
+                                            <% if(produits[i].qte == 0){%>
+                                                <button class="btn btn-danger btn-sm" disabled class="tooltip-test" title="add to cart" type ="submit">
+                                                    <i class="fa fa-shopping-cart"></i> Rupture de stock pour le moment
+                                                </button>
+                                                <% }else{%> 
+                                                <button class="btn btn-secondary btn-sm" class="tooltip-test" title="add to cart" type ="submit">
+                                                    <i class="fa fa-shopping-cart"></i> ajouter au panier
+                                                </button>
+                                            <% }%> 
+                                        </div>
                                     </form>
-                                    <a href="" class="btn btn-outline-primary"><i class="far fa-eye"></i></a>
                                 </div>
                             </div>
                         </div>

@@ -24,8 +24,24 @@ const pool = new Pool({
 	}
 })();
 
+async function get_accessoire_produit(){
+    let tab = [];
+    const query = "select* FROM accessoire NATURAL JOIN prod_acc";
+    let rows = await queryDatabase(query,[]);
+
+    for(let r of rows) {
+        let p = new Object();
+        p.nom_acc = r.nom;
+        p.id_acc = r.id_acc;
+        p.id_prod = r.id_prod;
+        tab.push(p);
+    }
+    return tab;
+}
+
 async function getProduits(){
 
+	const acc_prod = await get_accessoire_produit();
     let tab = [];
     let res =  await pool.query(
         "select id_prod,libelle,prix,nom_scat,img,sum(qte) as qte from produit natural join taille_prod group by (id_prod,libelle,prix,nom_scat,img)"
@@ -38,7 +54,16 @@ async function getProduits(){
         p.categorie = r.nom_scat;
         p.img = r.img;
         p.qte = r.qte;
-        // let p = new Produit(r.id_prod,r.libelle,r.nom_scat,r.img);
+        p.accessoires = [];
+
+        for (let acc of acc_prod) {
+            if (acc.id_prod === r.id_prod) {
+                let acc_info = new Object();
+                acc_info.id_acc = acc.id_acc;
+                acc_info.nom_acc = acc.nom_acc;
+                p.accessoires.push(acc_info);
+            }
+        }
         tab.push(p);
     }
     return tab;
@@ -396,6 +421,28 @@ async function get_qte_accessoire(idacc){
     return tab;
 }
 
+async function get_accessoires(){
+    let tab = [];
+    const query = "select * from accessoire"
+    let rows = await queryDatabase(query,[]);
+    for(let r of rows) {
+        let p = new Object();
+        p.nom_acc = r.nom;
+        p.id_acc = r.id_acc;
+        tab.push(p);
+    }
+    
+    return tab;
+}
+
+async function produit_a_deja_accesoire(id_prod,id_acc) {
+    let tab = [];
+    const query = "select * from prod_acc where id_acc = $1 and id_prod = $2";
+    let rows = await queryDatabase(query,[id_acc,id_prod]);
+    
+    return rows.length >0;
+}
+
 function hello( n) {
     hehe("Monsieur, Madame");
     console.log("Hello tu viens d'envoyer "+n);
@@ -409,4 +456,4 @@ module.exports = {hello, getProduits, getCategories, getSousCategories, getProdu
     getQteTailleProds, get_last_idcli, get_last_idcomm, get_comm_non_valider, 
     get_comm_valider, get_produits_comm, get_qte_produit, getAccessoires, getAccessoire, 
     get_qte_accessoire, getTaille, get_last_idcombi, get_last_idprod, getCombinaison,
-    getTabProdCombi, getCombinaisonsCat};
+    getTabProdCombi, getCombinaisonsCat,get_accessoire_produit,get_accessoires,produit_a_deja_accesoire};

@@ -293,3 +293,10 @@ INSERT INTO produit_combi(id_prod,id_combi) values
 (6,2),
 (7,2),
 (11,2);
+
+INSERT INTO accessoire (prix,img,qte,nom) VALUES
+(14,'ceinture_boss.jpg',45,'Ceinture Boss'),
+(60,'montre_casio.jpg',45,'Montre');
+
+INSERT INTO prod_acc VALUES
+(1,1);

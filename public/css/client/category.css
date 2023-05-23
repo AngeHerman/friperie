@@ -34,7 +34,7 @@ button.expansible {
     font-family: "arial", sans-serif;
     width: 100%;
     height: auto;   
-    padding: 15px 5px 10px 5px;
+    padding: 15px 5px 10px 10px;
     border-radius: 3px;
     border: 1px solid #808080;
     text-transform: uppercase;
@@ -46,8 +46,10 @@ div.cat {
 }
 
 ul.scat {
-    padding: 15px 5px 10px 5px;
+    padding: 15px 5px 15px 15px;
     font-size: 18px;
     justify-content: center;
-    margin-left: 10px;
+    border: 1px solid #808080;
+    margin-bottom: 0%;
+    background-color: #b9b9b9;
 }

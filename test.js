@@ -20,7 +20,7 @@ const body_parser = require('body-parser');
 app.use(multiparty({uploadDir: 'public/img'}));
 
 app.get('/', (req, res) => {
-  res.render("index.ejs");
+	res.render("index.ejs");
 });
 
 function get_cart_total(req){

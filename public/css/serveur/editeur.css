@@ -1,0 +1,13 @@
+.form-group {
+    padding-left: 20px;
+}
+
+.error {
+    background-color: rgb(220, 56, 72);
+    /* Additional styles for the error state */
+}
+
+h1 {
+    padding-left: 10px;
+}
+

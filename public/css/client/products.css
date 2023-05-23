@@ -4,6 +4,7 @@
     width: 100%;
     height: fit-content;
     align-items: start;
+    padding-top: 12px;
 }
 
 #posts{
