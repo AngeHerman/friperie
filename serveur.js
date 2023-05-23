@@ -38,7 +38,7 @@ function check_form_produit(req){
 
 
 	if (req.body.libelle.length == 0 || req.body.categorie.length == 0 || 
-		!Number.isFinite(parseFloat(req.body.prix)) || req.files.file.size == 0 ||
+		!/^\d+(\.\d+)?$/.test(req.body.prix) || req.files.file.size == 0 ||
 		!estEntier(req.body.XXS) || !estEntier(req.body.XS) || !estEntier(req.body.S) ||
 		!estEntier(req.body.M) || !estEntier(req.body.L) || !estEntier(req.body.XL)
 		|| !estEntier(req.body.XXL)
@@ -51,14 +51,8 @@ function check_form_produit(req){
 }
 
 function check_form_accessoire(req){
-	// console.log(req.files);
-	// console.log("file size est "+req.files.file.size);
-	// console.log("req.body.libelle.length est "+req.body.libelle.length);
-	// console.log("req.body.categorie.length est "+req.body.categorie.length);
-	// console.log("Number.isFinite(req.body.prix) est "+Number.isFinite( parseFloat(req.body.prix)));
 
-
-	if (req.body.libelle.length == 0 || !Number.isFinite(parseFloat(req.body.prix)) ||
+	if (req.body.libelle.length == 0 || !/^\d+(\.\d+)?$/.test(req.body.prix) ||
 		req.files.file.size == 0){
 		return false;
 	}else{
@@ -68,8 +62,8 @@ function check_form_accessoire(req){
 }
 
 function check_form_combinaisons(req){
-	if (req.body.nom.length == 0 || !Number.isFinite(parseFloat(req.body.prix)) ||
-	req.body.categorie.length == 0 || req.body.produit1 == "None"  || 
+	if (req.body.nom.length == 0 || !/^\d+(\.\d+)?$/.test(req.body.prix) ||
+	req.body.categorie.length == 0 || req.body.produit1.length == 0  || 
 	req.body.taille.length == 0){
 		return false;
 	}else{
@@ -399,8 +393,6 @@ server.get("/rech_cat/:scat", async (req, res) => {
 server.get('/Combinaisons',async (req,res) =>{
     // db.hello("Toto");
     const produits = await db.getProduits();
-	const categories = await db.getCategories();
-	const scategories = await db.getSousCategories();
 	const cat_combi = await db.getCatCombinaisons();
 	const prod_combi = await db.getProdCombinaisons();
 	const combinaisons = await db.getCombinaisons();
@@ -429,7 +421,7 @@ server.get('/Combinaisons/rech_cat_combi/:cat',async (req,res) =>{
     const produits = await db.getProduits();
 	const cat_combi = await db.getCatCombinaisons();
 	const prod_combi = await db.getProdCombinaisons();
-	const combinaisons = await db.getCombinaisons();
+	const combinaisons = await db.getCombinaisonsCat(cat);
     if(!req.session.cart)
     {
         req.session.cart = [];
@@ -685,12 +677,14 @@ server.post("/gerant/combinaisons/edit/:id", async (req, res) => {
 		let r2 = await update_des_produits_combinaison(req,id);
 		res.redirect("/gerant/combinaisons");
 	}else{
+		const id = parseInt(req.params.id);
 		const produit = await db.getCombinaison(id);
 		const produits = await db.getProduits();
 		const cat = await db.getCatCombinaisons();
 		const prod_combi = await db.getProdCombinaisons();
 		const taille = await db.getTaille();
 		let p = new Object;
+		p.id = produit.id;
 		p.nom = produit.nom;
 		p.categorie = produit.categorie;
 		p.prix = produit.prix;
@@ -840,7 +834,7 @@ server.post("/gerant/combinaisons/create", async (req, res) => {
 		let r2 = await ajoutProdCombi(req);
 		res.redirect("/gerant/combinaisons");
 	}else{
-		console.log("Arrivé dans problème "+req.body.produit1);
+		console.log("Arrivé dans problème ");
 		const cat = await db.getCatCombinaisons();
 		const produits = await db.getProduits();
 		const combinaisons = await db.getCombinaisons();

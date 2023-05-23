@@ -68,9 +68,9 @@ CREATE TABLE prod_acc(
     PRIMARY KEY (id_prod,id_acc)
 );
 
-CREATE TABLE cat_combi(
-    nom_cat_combi VARCHAR(30) PRIMARY KEY
-);
+    CREATE TABLE cat_combi(
+        nom_cat_combi VARCHAR(30) PRIMARY KEY
+    );
 
 CREATE TABLE combinaison(
     id_combi serial PRIMARY KEY ,

@@ -319,6 +319,24 @@ async function get_comm_valider(){
     return tab;
 }
 
+async function getCombinaisonsCat(cat){
+    let tab = [];
+    let res =  await pool.query(
+        "select * from combinaison where nom_cat_combi = $1",[cat]
+    );
+    for(let r of res.rows) {
+        let p = new Object;
+        p.idcombi = r.id_combi;
+        p.nom = r.nom;
+        p.nom_cat_combi = r.nom_cat_combi;
+        p.prix = r.prix;
+        p.qte = r.qte;
+        p.taille = r.taille;
+        tab.push(p);
+    }
+    return tab;
+}
+
 async function get_produits_comm(id_comm){
     let tab = [];
     const query = "select * from produit natural join comm_prod where id_comm = $1"
@@ -391,4 +409,4 @@ module.exports = {hello, getProduits, getCategories, getSousCategories, getProdu
     getQteTailleProds, get_last_idcli, get_last_idcomm, get_comm_non_valider, 
     get_comm_valider, get_produits_comm, get_qte_produit, getAccessoires, getAccessoire, 
     get_qte_accessoire, getTaille, get_last_idcombi, get_last_idprod, getCombinaison,
-    getTabProdCombi};
+    getTabProdCombi, getCombinaisonsCat};
