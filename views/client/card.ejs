@@ -1,151 +1,157 @@
 <div id="cards_landscape_wrap-2">
     <div class="row">
-        <% for(var i=0; i<produits.length; i++) {%>
-            <% if(produits[i].categorie == filtre){%> 
-                <a href="" class="">
-                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 my-2">
-                        <div class="card h-100 shadow" style="margin-bottom: 20px; height: auto;">
-                            <img src="/img/<%= produits[i].img %>" alt=""
-                            class="card-img-top mx-auto"
-                            style="height: 260px; width: 250px;display: block;"
-                            >
-                            <div class="card-body">
-                                <a href=""><h6 class="card-title"><%= produits[i].libelle %></h6></a>
-                                <p>Prix : <%= produits[i].prix %></p>
-                                <p>categorie : <%= produits[i].categorie %></p>
-                                <p>Id : <%= produits[i].id %></p>
+        <% if(combi) {
+            for(var i=0; i<combinaisons.length; i++) {%>
+                <% if(combinaisons[i].nom_cat_combi == filtre || filtre == ''){%> 
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 my-2">
+                            <div class="card h-100 shadow" style="margin-bottom: 20px; height: auto;">
+                                <div class="slideshow_container">
+                                    <% for (var j=0; j<prod_combi.length;j++){%>
+                                        <%if(prod_combi[j].idcombi == combinaisons[i].idcombi) {%>  
+                                            <div class="slide slide<%=i%>">
+                                                <%for (var k=0; k<produits.length;k++){%>
+                                                    <%if(produits[k].id == prod_combi[j].idprod) {%>
+                                                        <img src="/img/<%= produits[k].img%>" alt=""
+                                                            class="card-img-top mx-auto"
+                                                            style="height: 260px; width: 250px;display: block;"
+                                                        >
+                                                    <%}
+                                                }%>
+                                            </div>
+                                        <%}%>
+                                    <%}%>
+                                    <a class="prev" id="prev" value="<%=i%>">❮</a>
+                                    <a class="next" id="next" value="<%=i%>">❯</a>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-title"><%= combinaisons[i].nom %></h6>
+                                    <p>Prix : <%= combinaisons[i].prix %></p>
+                                    <p>categorie : <%= combinaisons[i].nom_cat_combi %></p>
+                                    <p>Id : <%= combinaisons[i].idcombi %></p>
 
-                                <form action="http://localhost:8080/add_cart" method="POST">
-                                    <input type="hidden" value="<%= produits[i].id %>" name="id">
-                                    <input type="hidden" value="<%= produits[i].libelle %>" id="libelle" name="libelle">
-                                    <input type="hidden" value="<%= produits[i].prix %>" id="price" name="prix">
-                                    <input type="hidden" value="<%= produits[i].img %>" id="img" name="img">
-                                    <input type="hidden" value="<%= produits[i].categorie %>" id="slug" name="categorie">
+                                    <form action="" method="POST">
+                                        <input type="hidden" value="<%= produits[i].id %>" name="id">
+                                        <input type="hidden" value="<%= produits[i].libelle %>" id="libelle" name="libelle">
+                                        <input type="hidden" value="<%= produits[i].prix %>" id="price" name="prix">
+                                        <input type="hidden" value="<%= produits[i].img %>" id="img" name="img">
+                                        <input type="hidden" value="<%= produits[i].categorie %>" id="slug" name="categorie">
 
-                                    <div class="card-footer h-25" style="background-color: white;">
-                                        <div class="row">
-                                            <div class="col">
+                                        <div class="card-footer h-25" style="background-color: white;">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <% if(produits[i].qte == 0){%>
 
-                                                <% if(produits[i].qte == 0){%>
+                                                        <button class="btn btn-danger btn-sm" disabled class="tooltip-test" title="add to cart" type ="submit">
+                                                            <i class="fa fa-shopping-cart"></i> Rupture de stock pour le moment
+                                                        </button>
+                                                        <% }else{%> 
+                                                        <button class="btn btn-secondary btn-sm" class="tooltip-test" title="add to cart" type ="submit">
+                                                            <i class="fa fa-shopping-cart"></i> ajouter au panier
+                                                        </button>
+                                                    <% }%> 
+                                                </div>
+                                                <% if(produits[i].qte != 0){%>
 
-                                                    <button class="btn btn-danger btn-sm" disabled class="tooltip-test" title="add to cart" type ="submit">
-                                                        <i class="fa fa-shopping-cart"></i> Rupture de stock pour le moment
-                                                    </button>
-                                                <% }else{%> 
-                                                    <button class="btn btn-secondary btn-sm" class="tooltip-test" title="add to cart" type ="submit">
-                                                        <i class="fa fa-shopping-cart"></i> ajouter au panier
-                                                    </button>
+                                                    <div class="col">
+                                                        <select class="form-control" name="qte" >
+                                                            <option value="1" selected="selected" >1</option>
+                                                            <% for(var k=2;k<7;k++) { %>
+                                                                <option value="<%=k%>"><%=k%></option>
+                                                            <%}%>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col">
+                                                        <select class="form-control" name="taille" >
+                                                            <option value="XL">XL</option>
+                                                            <option value="L" selected="selected" >L</option>
+                                                            <option value="M">M</option>
+                                                            <option value="S">S</option>
+                                                            <option value="XS">XS</option>
+                                                            <option value="XXS">XXS</option>
+
+                                                        </select>
+                                                    </div>
                                                 <% }%> 
                                             </div>
-                                            <% if(produits[i].qte != 0){%>
-
-                                                <div class="col">
-                                                    <select class="form-control" name="qte" >
-                                                        <option value="1" selected="selected" >1</option>
-                                                        <option value="2">2</option>
-                                                        <option value="3">3</option>
-                                                        <option value="4">4</option>
-                                                        <option value="5">5</option>
-                                                        <option value="6">6</option>
-
-                                                    </select>
-                                                </div>
-                                                <div class="col">
-                                                    <select class="form-control" name="taille" >
-                                                        <option value="XL">XL</option>
-                                                        <option value="L" selected="selected" >L</option>
-                                                        <option value="M">M</option>
-                                                        <option value="S">S</option>
-                                                        <option value="XS">XS</option>
-                                                        <option value="XXS">XXS</option>
-
-                                                    </select>
-                                                </div>
-                                            <% }%> 
-
                                         </div>
-                                    </div>
 
-                                </form>
-                                <a href="" class="btn btn-outline-primary"><i class="far fa-eye"></i></a>
+                                    </form>
+                                    <a href="" class="btn btn-outline-primary"><i class="far fa-eye"></i></a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </a>
-            <%}
-            else if(filtre == '') {%>
-                <a href="" class=""></a>
-                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 my-2">
-                        <div class="card h-100 shadow" style="margin-bottom: 20px; height: auto;">
-                            <img src="/img/<%= produits[i].img %>" alt=""
-                            class="card-img-top mx-auto"
-                            style="height: 260px; width: 250px;display: block;"
-                            >
-                            <div class="card-body">
-                                <a href=""><h6 class="card-title"><%= produits[i].libelle %></h6></a>
-                                <p>Prix : <%= produits[i].prix %></p>
-                                <p>categorie : <%= produits[i].categorie %></p>
-                                <p>Id : <%= produits[i].id %></p>
+                    </a>
+                <%}
+            } 
+        }
+        else {
+            for(var i=0; i<produits.length; i++) {
+                if(produits[i].categorie == filtre || filtre == ''){%> 
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 my-2">
+                            <div class="card h-100 shadow" style="margin-bottom: 20px; height: auto;">
+                                    <img src="/img/<%= produits[i].img %>" alt=""
+                                        class="card-img-top mx-auto"
+                                        style="height: 260px; width: 250px;display: block;"
+                                    >
+                                <div class="card-body">
+                                    <h6 class="card-title"><%= produits[i].libelle %></h6>
+                                    <p>Prix : <%= produits[i].prix %></p>
+                                    <p>categorie : <%= produits[i].categorie %></p>
+                                    <p>Id : <%= produits[i].id %></p>
 
-                                <form action="http://localhost:8080/add_cart" method="POST">
-                                    <input type="hidden" value="<%= produits[i].id %>" name="id">
-                                    <input type="hidden" value="<%= produits[i].libelle %>" id="libelle" name="libelle">
-                                    <input type="hidden" value="<%= produits[i].prix %>" id="price" name="prix">
-                                    <input type="hidden" value="<%= produits[i].img %>" id="img" name="img">
-                                    <input type="hidden" value="<%= produits[i].categorie %>" id="slug" name="categorie">
+                                    <form action="http://localhost:8080/add_cart" method="POST">
+                                        <input type="hidden" value="<%= produits[i].id %>" name="id">
+                                        <input type="hidden" value="<%= produits[i].libelle %>" id="libelle" name="libelle">
+                                        <input type="hidden" value="<%= produits[i].prix %>" id="price" name="prix">
+                                        <input type="hidden" value="<%= produits[i].img %>" id="img" name="img">
+                                        <input type="hidden" value="<%= produits[i].categorie %>" id="slug" name="categorie">
+                                        <div class="card-footer h-25" style="background-color: white;">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <% if(produits[i].qte == 0){%>
 
-                                    <div class="card-footer h-25" style="background-color: white;">
-                                        <div class="row">
-                                            <div class="col">
+                                                        <button class="btn btn-danger btn-sm" disabled class="tooltip-test" title="add to cart" type ="submit">
+                                                            <i class="fa fa-shopping-cart"></i> Rupture de stock pour le moment
+                                                        </button>
+                                                        <% }else{%> 
+                                                        <button class="btn btn-secondary btn-sm" class="tooltip-test" title="add to cart" type ="submit">
+                                                            <i class="fa fa-shopping-cart"></i> ajouter au panier
+                                                        </button>
+                                                    <% }%> 
+                                                </div>
+                                                <% if(produits[i].qte != 0){%>
 
-                                                <% if(produits[i].qte == 0){%>
+                                                    <div class="col">
+                                                        <select class="form-control" name="qte" >
+                                                            <option value="1" selected="selected" >1</option>
+                                                            <% for(var k=2;k<7;k++) { %>
+                                                                <option value="<%=k%>"><%=k%></option>
+                                                            <%}%>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col">
+                                                        <select class="form-control" name="taille" >
+                                                            <option value="XL">XL</option>
+                                                            <option value="L" selected="selected" >L</option>
+                                                            <option value="M">M</option>
+                                                            <option value="S">S</option>
+                                                            <option value="XS">XS</option>
+                                                            <option value="XXS">XXS</option>
 
-                                                    <button class="btn btn-danger btn-sm" disabled class="tooltip-test" title="add to cart" type ="submit">
-                                                        <i class="fa fa-shopping-cart"></i> Rupture de stock pour le moment
-                                                    </button>
-                                                <% }else{%> 
-                                                    <button class="btn btn-secondary btn-sm" class="tooltip-test" title="add to cart" type ="submit">
-                                                        <i class="fa fa-shopping-cart"></i> ajouter au panier
-                                                    </button>
+                                                        </select>
+                                                    </div>
                                                 <% }%> 
                                             </div>
-                                            <% if(produits[i].qte != 0){%>
-
-                                                <div class="col">
-                                                    <select class="form-control" name="qte" >
-                                                        <option value="1" selected="selected" >1</option>
-                                                        <option value="2">2</option>
-                                                        <option value="3">3</option>
-                                                        <option value="4">4</option>
-                                                        <option value="5">5</option>
-                                                        <option value="6">6</option>
-
-                                                    </select>
-                                                </div>
-                                                <div class="col">
-                                                    <select class="form-control" name="taille" >
-                                                        <option value="XL">XL</option>
-                                                        <option value="L" selected="selected" >L</option>
-                                                        <option value="M">M</option>
-                                                        <option value="S">S</option>
-                                                        <option value="XS">XS</option>
-                                                        <option value="XXS">XXS</option>
-
-                                                    </select>
-                                                </div>
-                                            <% }%> 
-
-
                                         </div>
-                                    </div>
 
-                                </form>
-                                <a href="" class="btn btn-outline-primary"><i class="far fa-eye"></i></a>
+                                    </form>
+                                    <a href="" class="btn btn-outline-primary"><i class="far fa-eye"></i></a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </a>
-            <%}
-        } %>
+                    </a>
+                <%}
+            } 
+        }%>
     </div>
 </div>

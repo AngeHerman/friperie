@@ -1,29 +1,91 @@
-<h1>Liste des produits (<%= produits.length %>)</h1>
+<% if (combi) {%>
+    <h1>Liste des combinaisons (<%= combinaisons.length %>)</h1>
+<% } else if(acc) {%>
+    <h1>Liste des accessoires (<%= produits.length %>)</h1>
+<% } else  {%>
+    <h1>Liste des produits (<%= produits.length %>)</h1>
+<%}  %>
 
 <div class="table-responsive-sm">
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th>Libelle</th>
-        <th>Prix</th>
-        <th>Categorie</th>
-        <th class="d-print-none">
-          <a class="btn btn-sm btn-success" href="/gerant/produit/create">Ajouter</a>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <% for (const p of produits) { %>
-        <tr>
-          <td><%= p.libelle %></td>
-          <td><%= p.prix %></td>
-          <td><%= p.categorie %></td>
-          <td class="d-print-none">
-            <a class="btn btn-sm btn-warning" href="/gerant/produit/edit/<%= p.id %>">Modifier</a>
-            <a class="btn btn-sm btn-danger" href="/gerant/produit/delete/<%= p.id %>" onclick="return confirm('Confirmer la suppression ?')">Effacer</a>
-          </td>
-        </tr>
-      <% } %>
-    </tbody>
-  </table>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <%if (combi) {%>
+                    <th>Libelle</th>
+                    <th>Produits</th>
+                    <th>Prix</th>
+                    <th>Categorie</th>
+                    <th>Taille</th>
+                    <th class="d-print-none">
+                        <a class="btn btn-sm btn-success" href="/gerant/combinaisons/create">Ajouter</a>
+                    </th>
+                <%} 
+                else if (acc) {%>
+                    <th>Libelle</th>
+                    <th>Prix</th>
+                    <th class="d-print-none">
+                        <a class="btn btn-sm btn-success" href="/gerant/accessoires/create">Ajouter</a>
+                    </th>
+                <%}else { %>
+                    <th>Libelle</th>
+                    <th>Prix</th>
+                    <th>Categorie</th>
+                    <th class="d-print-none">
+                        <a class="btn btn-sm btn-success" href="/gerant/produit/create">Ajouter</a>
+                    </th>
+                <%}%>
+            </tr>
+        </thead>
+        <tbody>
+        <% if(combi) { 
+            for (var p=0; p<combinaisons.length;p++){%>
+                <tr>
+                    <td><%= combinaisons[p].nom %></td>
+                    <td>
+                    <%for (var c=0; c<prod_combi.length;c++){%>
+                        <%if(prod_combi[c].idcombi == combinaisons[p].idcombi) {%>
+                            <%for (var d=0; d<produits.length;d++) {
+                                if(produits[d].id == prod_combi[c].idprod){%>
+                                    <%=produits[d].libelle%> ,
+                                <%}
+                            }%>
+                        <%}%>
+                    <%}%>
+                    </td>
+                    <td><%= combinaisons[p].prix %></td>
+                    <td><%= combinaisons[p].nom_cat_combi %></td>
+                    <td><%= combinaisons[p].taille %></td>
+                    <td class="d-print-none">
+                        <a class="btn btn-sm btn-warning" href="/gerant/combinaisons/edit/<%= combinaisons[p].idcombi %>">Modifier</a>
+                        <a class="btn btn-sm btn-danger" href="/gerant/combinaisons/delete/<%= combinaisons[p].idcombi %>" onclick="return confirm('Confirmer la suppression ?')">Effacer</a>
+                    </td>
+                </tr>
+                
+            <%} 
+        } else if(acc) { 
+            for (const p of produits) { %>
+            <tr>
+                <td><%= p.nom %></td>
+                <td><%= p.prix %></td>
+                <td class="d-print-none">
+                    <a class="btn btn-sm btn-warning" href="/gerant/accessoires/edit/<%= p.idacc %>">Modifier</a>
+                    <a class="btn btn-sm btn-danger" href="/gerant/accessoires/delete/<%= p.idacc %>" onclick="return confirm('Confirmer la suppression ?')">Effacer</a>
+                </td>
+            </tr>
+        <% } 
+        }else {
+            for (const p of produits) { %>
+            <tr>
+                <td><%= p.libelle %></td>
+                <td><%= p.prix %></td>
+                <td><%= p.categorie %></td>
+                <td class="d-print-none">
+                    <a class="btn btn-sm btn-warning" href="/gerant/produit/edit/<%= p.id %>">Modifier</a>
+                    <a class="btn btn-sm btn-danger" href="/gerant/produit/delete/<%= p.id %>" onclick="return confirm('Confirmer la suppression ?')">Effacer</a>
+                </td>
+            </tr>
+        <% } 
+        }%>
+        </tbody>
+    </table>
 </div>

@@ -103,15 +103,121 @@ async function getProduit(id){
     return p;
 }
 
-async function getCategories(){
-
+async function getAccessoires(){
     let tab = [];
     let res =  await pool.query(
-        "select * from cat_prod"
+        "select * from accessoire"
     );
     for(let r of res.rows) {
         let p = new Object;
-        p.nom = r.nom_cat;
+        p.idacc = r.id_acc;
+        p.nom = r.nom;
+        p.prix = r.prix;
+        tab.push(p);
+    }
+    return tab;
+}
+
+async function getAccessoire(id){
+
+    const sql = "SELECT * FROM accessoire WHERE id_acc = $1";
+    let rows = await queryDatabase(sql,[id]);
+    if(!rows){
+        return null;
+    }
+    // console.log(rows);
+    let p = new Object;
+    p.id = rows[0].id_acc;
+    p.nom = rows[0].nom;
+    p.prix = rows[0].prix;
+    p.img = rows[0].img;
+    p.qte = rows[0].qte;
+    return p;
+}
+
+async function getCombinaison(id){
+
+    const sql = "SELECT * FROM combinaison WHERE id_combi = $1";
+    let rows = await queryDatabase(sql,[id]);
+    if(!rows){
+        return null;
+    }
+    // console.log(rows);
+    let p = new Object;
+    p.id = rows[0].id_combi;
+    p.nom = rows[0].nom;
+    p.categorie = rows[0].nom_cat_combi;
+    p.prix = rows[0].prix;
+    p.taille = rows[0].taille;
+    return p;
+}
+
+async function getTabProdCombi(id){
+    let tab = [];
+    const sql = "SELECT * FROM produit_combi WHERE id_combi = $1";
+    let rows = await queryDatabase(sql,[id]);
+    if(!rows){
+        return null;
+    }
+    for(let r of rows) {
+        const produits = "SELECT * FROM produit WHERE id_prod = $1";
+        let rowsProd = await queryDatabase(produits,[r.id_prod]); 
+        if(!rowsProd){
+            return null;
+        }
+        let p = rowsProd[0].libelle;
+        tab.push(p);
+    }
+    while(tab.length<3){
+        tab.push("None");
+    }
+    return tab;
+}
+
+
+async function getCatCombinaisons(){
+
+    let tab = [];
+    let res =  await pool.query(
+        "select * from cat_combi"
+    );
+    for(let r of res.rows) {
+        let p = new Object;
+        p.nom = r.nom_cat_combi;
+        tab.push(p);
+    }
+    return tab;
+}
+
+async function getCombinaisons(){
+
+    let tab = [];
+    let res =  await pool.query(
+        "select * from combinaison"
+    );
+    for(let r of res.rows) {
+        let p = new Object;
+        p.idcombi = r.id_combi;
+        p.nom = r.nom;
+        p.nom_cat_combi = r.nom_cat_combi;
+        p.prix = r.prix;
+        p.qte = r.qte;
+        p.taille = r.taille;
+        tab.push(p);
+    }
+    return tab;
+}
+
+async function getProdCombinaisons(){
+
+    let tab = [];
+    let res =  await pool.query(
+        "select * from produit_combi"
+    );
+    for(let r of res.rows) {
+        let p = new Object;
+        p.idprod = r.id_prod;
+        p.idcombi = r.id_combi;
         tab.push(p);
     }
     return tab;
@@ -149,10 +255,32 @@ async function get_last_idcomm(){
     return parseInt( res.rows[0].id);
 }
 
+async function getTaille(){
+
+    let tab = [];
+    let res =  await pool.query(
+        "select * FROM taille"
+    );
+    for(let r of res.rows) {
+        let p = new Object;
+        p.taille = r.taille;
+        tab.push(p);
+    }
+    return tab;
+}
+
 async function get_last_idprod(){
 
     let res =  await pool.query(
         "select MAX(id_prod) as id from produit"
+    );
+    return parseInt( res.rows[0].id);
+}
+
+async function get_last_idcombi(){
+
+    let res =  await pool.query(
+        "select MAX(id_combi) as id from combinaison"
     );
     return parseInt( res.rows[0].id);
 }
@@ -211,7 +339,7 @@ async function get_produits_comm(id_comm){
 }
 
 async function get_qte_produit(id_prod){
-    let tab = [0,0,0,0,0,0,0]
+    let tab = [0,0,0,0,0,0,0];
     const query = "select * from taille_prod where id_prod = $1"
     let rows = await queryDatabase(query,[id_prod]);
     if(!rows){
@@ -237,6 +365,18 @@ async function get_qte_produit(id_prod){
     return tab;
 }
 
+async function get_qte_accessoire(idacc){
+    let tab = [0];
+    const query = "select * from accessoire where id_acc = $1"
+    let rows = await queryDatabase(query,[idacc]);
+    if(!rows){
+        return null;
+    }
+    for(let r of rows) {
+        tab[0] = r.qte;
+    }
+    return tab;
+}
 
 function hello( n) {
     hehe("Monsieur, Madame");
@@ -246,5 +386,9 @@ function hehe(n){
     console.log("Bienvenu "+n);
 }
 
-module.exports = {hello,getProduits,getCategories,getSousCategories,getProduit,queryDatabase,getQteTailleProds,get_last_idcli,
-get_last_idcomm,get_comm_non_valider,get_comm_valider,get_produits_comm,get_qte_produit,get_last_idprod};
+module.exports = {hello, getProduits, getCategories, getSousCategories, getProduit,
+    getCombinaisons, getCatCombinaisons, getProdCombinaisons, queryDatabase, 
+    getQteTailleProds, get_last_idcli, get_last_idcomm, get_comm_non_valider, 
+    get_comm_valider, get_produits_comm, get_qte_produit, getAccessoires, getAccessoire, 
+    get_qte_accessoire, getTaille, get_last_idcombi, get_last_idprod, getCombinaison,
+    getTabProdCombi};

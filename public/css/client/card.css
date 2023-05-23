@@ -8,7 +8,6 @@ body{
 	box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
 	transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
 	/* padding: 14px 80px 18px 36px; */
-	cursor: pointer;
 }
 .card:hover{
 	transform: scale(1.05);
@@ -119,4 +118,40 @@ body{
 	display: table-cell;
 	vertical-align: middle;
 	width: 61%;
+}
+
+.slideshow_container {
+	max-width: 1000px;
+	position: relative;
+	margin: auto;
+}
+
+.slide {
+	display: none;
+}
+
+.prev:hover, .next:hover {
+	background-color: rgba(255, 145, 145, 0.8);
+}
+
+a.next, a.prev{
+	cursor: pointer;
+	position: absolute;
+	top: 50%;
+	width: auto;
+	padding: 5px;
+	margin-top: -22px;
+	font-weight: bold;	
+	font-size: 18px;
+	border-radius: 0 3px 3px 0;
+	user-select: none;
+}
+
+.next {
+	right: 0;
+	border-radius: 3px 0 0 3px;
+}
+
+.prev{
+	left: 0	;
 }

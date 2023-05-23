@@ -2,86 +2,149 @@
 <div class="form-group row">
     <label class="col-form-label col-sm-2" for="libelle">Libelle</label>
     <div class="col-sm-8">
-        <input autofocus class="form-control" name="libelle" value="<%= produit.libelle %>" />
+        <% if (combi) {%> 
+            <input autofocus class="form-control" name="nom" value="<%= produit.nom %>" />
+        <%} else if(acc) {%>
+            <input autofocus class="form-control" name="libelle" value="<%= produit.nom %>" />
+        <%} else {%>
+            <input autofocus class="form-control" name="libelle" value="<%= produit.libelle %>" />
+        <%}%>
     </div>
 </div>
-
 <div class="form-group row">
     <label class="col-form-label col-sm-2" for="prix">Prix</label>
     <div class="col-sm-7">
         <input class="form-control" name="prix" value="<%= produit.prix %>" />
     </div>
 </div>
-
-<div class="form-group row">
-    <label class="col-form-label col-sm-2" for="prix">Categorie</label>
-    <div class="col-sm-10">   
-        <select name="categorie">
-        <% for (const c of cat) { %>
-
-            <optgroup label="<%= c.nom %>" >
-                <% for (const s of scat) { 
-                    if(s.nom === c.nom){
-                        if(s.snom === produit.categorie){
-                    %>
-                        <option selected="selected" value = "<%= s.snom %>"><%= s.snom %></option>
-                    <% } else{%>
-                        <option value = "<%= s.snom %>"><%= s.snom %></option>
-                <% }}} %>
-            </optgroup>
-        <% } %>
-        </select>
+<%if (combi){%>
+    <div class="form-group row">
+        <label class="col-form-label col-sm-2" for="categorie">Categorie</label>
+        <div class="col-sm-10">   
+            <select name="categorie">
+            <% for (const c of cat) { 
+                if(c.nom == produit.categorie){%>
+                    <option selected="selected" value = "<%= c.nom %>"><%= c.nom %></option>
+                <%} else {%>
+                    <option value = "<%= c.nom %>"><%= c.nom %></option>
+                <%}
+            } %>
+            </select>
+        </div>
+    </div>
+<%} else if (!acc && !combi) {%>
+    <div class="form-group row">
+        <label class="col-form-label col-sm-2" for="categorie">Categorie</label>
+        <div class="col-sm-10">   
+            <select name="categorie">
+            <% for (const c of cat) { %>
+                <optgroup label="<%= c.nom %>" >
+                    <% for (const s of scat) { 
+                        if(s.nom === c.nom){
+                            if(s.snom === produit.categorie){
+                        %>
+                            <option selected="selected" value = "<%= s.snom %>"><%= s.snom %></option>
+                        <% } else{%>
+                            <option value = "<%= s.snom %>"><%= s.snom %></option>
+                    <% }}} %>
+                </optgroup>
+            <% } %>
+            </select>
+        </div>
+    </div>
+<%}
+if (!combi) {%>
+    <div class="form-group row">
+        <label class="col-form-label col-sm-2" for="image">Image</label>
+        <div class="col-sm-7">
+            <input type="file" class="form-control" name="file" value="<%= produit.img %>" />
+        </div>
+    </div>
+<%}
+if (acc){%>
+    <div class="form-group row">
+        <label class="col-form-label col-sm-2" for="quantite">Quantité</label>
+        <div class="col-sm-7">
+            <input type="text" class="form-control" name="qte" value="<%= qte[0] %>" />
+        </div>
+    </div>
+<%} else if (combi) {%>
+    <div class="form-group row">
+        <label class="col-form-label col-sm-2" for="produit">Produits</label>
+        <div class="col-sm-10">   
+            <%for (var i = 1;i<=3;i++){%>
+                <select name="produit<%=i%>">
+                    <option value="<%= null %>" <% if (produit.libelle[i-1] === "None") { %> selected <% } %>>None</option>
+                    <% for (const p of list_produits) { %>
+                        <% if (produit.libelle[i-1] === p.libelle) { %>
+                            <option selected="selected" value="<%= p.libelle %>"><%= p.libelle %></option>
+                        <% } else { %>
+                            <option value="<%= p.libelle %>"><%= p.libelle %></option>
+                        <% } %>
+                    <% } %>
+                </select>
+            <%}%>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-form-label col-sm-2" for="taille">Taille</label>
+        <div class="col-sm-10">   
+            <select name="taille">
+            <% for (const t of list_taille) { 
+                if(t.taille == produit.taille) {%>
+                    <option selected="selected" value = "<%= t.taille %>"><%= t.taille %></option>
+                <%} else {%>
+                    <option value = "<%= t.taille %>"><%= t.taille %></option>
+                <%}
+            } %>
+            </select>
+        </div>
+    </div>
+<%} else {%>
+    <div class="form-group row">
+        <label class="col-form-label col-sm-2" for="tailles">Quantité XXS</label>
+        <div class="col-sm-7">
+            <input type="text" class="form-control" name="XXS" value="<%= taille[0] %>" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-form-label col-sm-2" for="tailles">Quantité XS</label>
+        <div class="col-sm-7">
+            <input type="text" class="form-control" name="XS" value="<%= taille[1] %>" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-form-label col-sm-2" for="tailles">Quantité S</label>
+        <div class="col-sm-7">
+            <input type="text" class="form-control" name="S" value="<%= taille[2] %>" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-form-label col-sm-2" for="tailles">Quantité M</label>
+        <div class="col-sm-7">
+            <input type="text" class="form-control" name="M" value="<%= taille[3] %>" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-form-label col-sm-2" for="tailles">Quantité L</label>
+        <div class="col-sm-7">
+            <input type="text" class="form-control" name="L" value="<%= taille[4] %>" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-form-label col-sm-2" for="tailles">Quantité XL</label>
+        <div class="col-sm-7">
+            <input type="text" class="form-control" name="XL" value="<%= taille[5] %>" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-form-label col-sm-2" for="tailles">Quantité XXL</label>
+        <div class="col-sm-7">
+            <input type="text" class="form-control" name="XXL" value="<%= taille[6] %>" />
+        </div>
     </div>
 
-</div>
-<div class="form-group row">
-    <label class="col-form-label col-sm-2" for="prix">Image</label>
-    <div class="col-sm-7">
-        <input type="file" class="form-control" name="file" value="<%= produit.img %>" />
-    </div>
-</div>
-<div class="form-group row">
-    <label class="col-form-label col-sm-2" for="tailles">Quantité XXS</label>
-    <div class="col-sm-7">
-        <input type="text" class="form-control" name="XXS" value="<%= taille[0] %>" />
-    </div>
-</div>
-<div class="form-group row">
-    <label class="col-form-label col-sm-2" for="tailles">Quantité XS</label>
-    <div class="col-sm-7">
-        <input type="text" class="form-control" name="XS" value="<%= taille[1] %>" />
-    </div>
-</div>
-<div class="form-group row">
-    <label class="col-form-label col-sm-2" for="tailles">Quantité S</label>
-    <div class="col-sm-7">
-        <input type="text" class="form-control" name="S" value="<%= taille[2] %>" />
-    </div>
-</div>
-<div class="form-group row">
-    <label class="col-form-label col-sm-2" for="tailles">Quantité M</label>
-    <div class="col-sm-7">
-        <input type="text" class="form-control" name="M" value="<%= taille[3] %>" />
-    </div>
-</div>
-<div class="form-group row">
-    <label class="col-form-label col-sm-2" for="tailles">Quantité L</label>
-    <div class="col-sm-7">
-        <input type="text" class="form-control" name="L" value="<%= taille[4] %>" />
-    </div>
-</div>
-<div class="form-group row">
-    <label class="col-form-label col-sm-2" for="tailles">Quantité XL</label>
-    <div class="col-sm-7">
-        <input type="text" class="form-control" name="XL" value="<%= taille[5] %>" />
-    </div>
-</div>
-<div class="form-group row">
-    <label class="col-form-label col-sm-2" for="tailles">Quantité XXL</label>
-    <div class="col-sm-7">
-        <input type="text" class="form-control" name="XXL" value="<%= taille[6] %>" />
-    </div>
-</div>
+<%}%>
 
 <input type="hidden" name="filename" value="<%= produit.img %>" />
     
