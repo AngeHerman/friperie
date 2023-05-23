@@ -21,38 +21,47 @@
                                     <input type="hidden" value="<%= produits[i].prix %>" id="price" name="prix">
                                     <input type="hidden" value="<%= produits[i].img %>" id="img" name="img">
                                     <input type="hidden" value="<%= produits[i].categorie %>" id="slug" name="categorie">
-                                    <!-- <input type="hidden" value="1"  name="quantity">
-                                    <input type="hidden" value="L"  name="taille"> -->
+
                                     <div class="card-footer h-25" style="background-color: white;">
                                         <div class="row">
                                             <div class="col">
-                                            <!-- @if(\Cart::getTotalQuantity()<$max_panier) -->
-                                            <button class="btn btn-secondary btn-sm" class="tooltip-test" title="add to cart" type ="submit">
-                                                <i class="fa fa-shopping-cart"></i> ajouter au panier
-                                            </button>
-                                            </div>
-                                            <div class="col">
-                                                <select class="form-control" name="qte" >
-                                                    <option value="1" selected="selected" >1</option>
-                                                    <option value="2">2</option>
-                                                    <option value="3">3</option>
-                                                    <option value="4">4</option>
-                                                    <option value="5">5</option>
-                                                    <option value="6">6</option>
 
-                                                </select>
-                                            </div>
-                                            <div class="col">
-                                                <select class="form-control" name="taille" >
-                                                    <option value="XL">XL</option>
-                                                    <option value="L" selected="selected" >L</option>
-                                                    <option value="M">M</option>
-                                                    <option value="S">S</option>
-                                                    <option value="XS">XS</option>
-                                                    <option value="XXS">XXS</option>
+                                                <% if(produits[i].qte == 0){%>
 
-                                                </select>
+                                                    <button class="btn btn-danger btn-sm" disabled class="tooltip-test" title="add to cart" type ="submit">
+                                                        <i class="fa fa-shopping-cart"></i> Rupture de stock pour le moment
+                                                    </button>
+                                                <% }else{%> 
+                                                    <button class="btn btn-secondary btn-sm" class="tooltip-test" title="add to cart" type ="submit">
+                                                        <i class="fa fa-shopping-cart"></i> ajouter au panier
+                                                    </button>
+                                                <% }%> 
                                             </div>
+                                            <% if(produits[i].qte != 0){%>
+
+                                                <div class="col">
+                                                    <select class="form-control" name="qte" >
+                                                        <option value="1" selected="selected" >1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
+                                                        <option value="4">4</option>
+                                                        <option value="5">5</option>
+                                                        <option value="6">6</option>
+
+                                                    </select>
+                                                </div>
+                                                <div class="col">
+                                                    <select class="form-control" name="taille" >
+                                                        <option value="XL">XL</option>
+                                                        <option value="L" selected="selected" >L</option>
+                                                        <option value="M">M</option>
+                                                        <option value="S">S</option>
+                                                        <option value="XS">XS</option>
+                                                        <option value="XXS">XXS</option>
+
+                                                    </select>
+                                                </div>
+                                            <% }%> 
 
                                         </div>
                                     </div>
@@ -84,38 +93,48 @@
                                     <input type="hidden" value="<%= produits[i].prix %>" id="price" name="prix">
                                     <input type="hidden" value="<%= produits[i].img %>" id="img" name="img">
                                     <input type="hidden" value="<%= produits[i].categorie %>" id="slug" name="categorie">
-                                    <!-- <input type="hidden" value="1"  name="quantity">
-                                    <input type="hidden" value="L"  name="taille"> -->
+
                                     <div class="card-footer h-25" style="background-color: white;">
                                         <div class="row">
                                             <div class="col">
-                                            <!-- @if(\Cart::getTotalQuantity()<$max_panier) -->
-                                            <button class="btn btn-secondary btn-sm" class="tooltip-test" title="add to cart" type ="submit">
-                                                <i class="fa fa-shopping-cart"></i> ajouter au panier
-                                            </button>
-                                            </div>
-                                            <div class="col">
-                                                <select class="form-control" name="qte" >
-                                                    <option value="1" selected="selected" >1</option>
-                                                    <option value="2">2</option>
-                                                    <option value="3">3</option>
-                                                    <option value="4">4</option>
-                                                    <option value="5">5</option>
-                                                    <option value="6">6</option>
 
-                                                </select>
-                                            </div>
-                                            <div class="col">
-                                                <select class="form-control" name="taille" >
-                                                    <option value="XL">XL</option>
-                                                    <option value="L" selected="selected" >L</option>
-                                                    <option value="M">M</option>
-                                                    <option value="S">S</option>
-                                                    <option value="XS">XS</option>
-                                                    <option value="XXS">XXS</option>
+                                                <% if(produits[i].qte == 0){%>
 
-                                                </select>
+                                                    <button class="btn btn-danger btn-sm" disabled class="tooltip-test" title="add to cart" type ="submit">
+                                                        <i class="fa fa-shopping-cart"></i> Rupture de stock pour le moment
+                                                    </button>
+                                                <% }else{%> 
+                                                    <button class="btn btn-secondary btn-sm" class="tooltip-test" title="add to cart" type ="submit">
+                                                        <i class="fa fa-shopping-cart"></i> ajouter au panier
+                                                    </button>
+                                                <% }%> 
                                             </div>
+                                            <% if(produits[i].qte != 0){%>
+
+                                                <div class="col">
+                                                    <select class="form-control" name="qte" >
+                                                        <option value="1" selected="selected" >1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
+                                                        <option value="4">4</option>
+                                                        <option value="5">5</option>
+                                                        <option value="6">6</option>
+
+                                                    </select>
+                                                </div>
+                                                <div class="col">
+                                                    <select class="form-control" name="taille" >
+                                                        <option value="XL">XL</option>
+                                                        <option value="L" selected="selected" >L</option>
+                                                        <option value="M">M</option>
+                                                        <option value="S">S</option>
+                                                        <option value="XS">XS</option>
+                                                        <option value="XXS">XXS</option>
+
+                                                    </select>
+                                                </div>
+                                            <% }%> 
+
 
                                         </div>
                                     </div>

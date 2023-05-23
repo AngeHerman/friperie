@@ -28,7 +28,7 @@ async function getProduits(){
 
     let tab = [];
     let res =  await pool.query(
-        "select * from produit"
+        "select id_prod,libelle,prix,nom_scat,img,sum(qte) as qte from produit natural join taille_prod group by (id_prod,libelle,prix,nom_scat,img)"
     );
     for(let r of res.rows) {
         let p = new Object;
@@ -37,6 +37,7 @@ async function getProduits(){
         p.prix = r.prix;
         p.categorie = r.nom_scat;
         p.img = r.img;
+        p.qte = r.qte;
         // let p = new Produit(r.id_prod,r.libelle,r.nom_scat,r.img);
         tab.push(p);
     }
@@ -235,6 +236,7 @@ async function get_qte_produit(id_prod){
     }
     return tab;
 }
+
 
 function hello( n) {
     hehe("Monsieur, Madame");
