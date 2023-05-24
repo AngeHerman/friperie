@@ -320,7 +320,6 @@ async function remplissage_commande(req){
 	
 		// On prend l'id du client
 		let id_client = await db.get_last_idcli();
-		// console.log("Client créé");
 	
 		//On crée la commande
 		const query2 = "INSERT INTO commandes(adresse,mail,prix,valider) VALUES ($1, $2, $3, $4)";
@@ -329,39 +328,30 @@ async function remplissage_commande(req){
 	
 		// On prend l'id de la commande
 		let id_comm = await db.get_last_idcomm();
-		// console.log("Commande créé idclient "+id_client+" idcomm "+id_comm);
 	
 		//On lie le client à la commande
 		const query3 = "INSERT INTO client_comm(id_cli, id_comm) VALUES ($1, $2)";
 		const params3 = [id_client,id_comm];
 		let r3 = await db.queryDatabase(query3,params3);
-		// console.log("Client comm créé");
 	
 		//On lie les produits commandés à la commande 
 		for(let i = 0; i < req.session.cart.length; i++)
 		{
-			// console.log("id "+ req.session.cart[i].id);
-			// console.log("qte "+ req.session.cart[i].qte);
-			// console.log("taille "+ req.session.cart[i].taille);
 			const query4 = "INSERT INTO comm_prod(id_prod, id_comm, qte, taille) VALUES ($1, $2, $3, $4)";
 			const params4 = [req.session.cart[i].id ,id_comm, req.session.cart[i].qte, req.session.cart[i].taille];
 			let r4 = await db.queryDatabase(query4,params4);
 		}
-		// console.log("Comm produit créé");
 	
 		//On diminue la quantité de produits dans la base de données
 		qte_taille = await db.getQteTailleProds();
 		req.session.cart.forEach(async (p_cart) => {
 			const ligne_produit = qte_taille.find(u => u.taille === p_cart.taille && u.id === p_cart.id);
 			const nouvelle_qte = ligne_produit.qte - p_cart.qte;
-			// console.log(nouvelle_qte);
 	
 			const query5 = "UPDATE taille_prod SET qte = $1 WHERE id_prod = $2 AND taille = $3";
 			const params5 = [nouvelle_qte ,p_cart.id,p_cart.taille];
 			let r5 = await db.queryDatabase(query5,params5);
 		});
-		// console.log("Update qte créé");
-	
 	} catch (error) {
 		console.log("Erreur lors de la validation de la commande");
 		
@@ -370,7 +360,6 @@ async function remplissage_commande(req){
 }
 
 server.get('/',async (req,res) =>{
-    // db.hello("Toto");
     const produits = await db.getProduits();
 	const categories = await db.getCategories();
 	const scategories = await db.getSousCategories();
@@ -416,7 +405,6 @@ server.get("/rech_cat/:scat", async (req, res) => {
 });
 
 server.get('/Combinaisons',async (req,res) =>{
-    // db.hello("Toto");
     const produits = await db.getProduits();
 	const cat_combi = await db.getCatCombinaisons();
 	const prod_combi = await db.getProdCombinaisons();
@@ -516,9 +504,6 @@ server.get('/remove_item', (req, res) => {
 	const id =  parseInt(req.query.id);
 	const taille = req.query.taille;
 
-	
-    // console.log("Arrivé et id est " +id);
-
 	for(let i = 0; i < req.session.cart.length; i++)
 	{
 		console.log("Arrivé et id est " +id+ "cart taille est "+req.session.cart[i].taille+ " taille a sup est "+taille);
@@ -597,7 +582,6 @@ server.post("/gerant/produit/edit/:id", async (req, res) => {
 	const file = req.files.file;
 	let filename = file.path.substring(11);
 	if(check_form_produit_sauf_img(req)){
-		console.log("edit1");
 		if(req.files.file.size == 0){
 			filename = req.body.filename;
 		}
@@ -609,7 +593,6 @@ server.post("/gerant/produit/edit/:id", async (req, res) => {
 		res.redirect("/gerant/produit");
 
 	}else{
-		console.log("edit2");
 		const cat = await db.getCategories();
 		const scat = await db.getSousCategories();
 		const produit = await db.getProduit(parseInt(req.params.id));
@@ -794,10 +777,7 @@ server.get("/gerant/combinaisons/create", async (req, res) => {
 
 server.post("/gerant/produit/create", async (req, res) => {
 	const file = req.files.file;
-	// console.log(file.name);
 	let filename = file.path.substring(11);
-	// console.log(filename);
-	// console.log(check_form_produit(req));
 	if(check_form_produit(req)){
 		const query = "INSERT INTO produit (libelle,prix,img,nom_scat) VALUES ($1, $2, $3, $4)";
 		const params = [req.body.libelle , parseFloat(req.body.prix), filename, req.body.categorie];
@@ -832,10 +812,7 @@ server.post("/gerant/produit/create", async (req, res) => {
 
 server.post("/gerant/accessoires/create", async (req, res) => {
 	const file = req.files.file;
-	// console.log(file.name);
 	let filename = file.path.substring(11);
-	// console.log(filename);
-	// console.log(check_form_produit(req));
 	if(check_form_accessoire(req)){
 		const query = "INSERT INTO accessoire (nom,prix,img,qte) VALUES ($1, $2, $3, $4)";
 		const params = [req.body.libelle , parseFloat(req.body.prix), filename , parseInt(req.body.qte)];
