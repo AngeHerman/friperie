@@ -21,3 +21,7 @@ background-color: #555;
 h1 {
     padding-left: 10px;
 }
+
+.error {
+    background-color: rgb(220, 56, 72);
+}

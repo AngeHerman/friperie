@@ -38,7 +38,7 @@ function check_form_produit(req){
 
 
 	if (req.body.libelle.length == 0 || req.body.categorie.length == 0 || 
-		!Number.isFinite(parseFloat(req.body.prix)) || req.files.file.size == 0 ||
+		!/^\d+(\.\d+)?$/.test(req.body.prix) || req.files.file.size == 0 ||
 		!estEntier(req.body.XXS) || !estEntier(req.body.XS) || !estEntier(req.body.S) ||
 		!estEntier(req.body.M) || !estEntier(req.body.L) || !estEntier(req.body.XL)
 		|| !estEntier(req.body.XXL)
@@ -58,7 +58,7 @@ function check_form_accessoire(req){
 	// console.log("Number.isFinite(req.body.prix) est "+Number.isFinite( parseFloat(req.body.prix)));
 
 
-	if (req.body.libelle.length == 0 || !Number.isFinite(parseFloat(req.body.prix)) ||
+	if (req.body.libelle.length == 0 || !/^\d+(\.\d+)?$/.test(req.body.prix) ||
 		req.files.file.size == 0){
 		return false;
 	}else{
@@ -68,7 +68,7 @@ function check_form_accessoire(req){
 }
 
 function check_form_combinaisons(req){
-	if (req.body.nom.length == 0 || !Number.isFinite(parseFloat(req.body.prix)) ||
+	if (req.body.nom.length == 0 || !/^\d+(\.\d+)?$/.test(req.body.prix) ||
 	req.body.categorie.length == 0 || req.body.produit1.length == 0  || 
 	req.body.taille.length == 0){
 		return false;
@@ -81,7 +81,7 @@ function check_form_combinaisons(req){
 function check_form_produit_sauf_img(req){
 
 	if (req.body.libelle.length == 0 || req.body.categorie.length == 0 || 
-		!Number.isFinite(parseFloat(req.body.prix)) ||
+		!/^\d+(\.\d+)?$/.test(req.body.prix) ||
 		!estEntier(req.body.XXS) || !estEntier(req.body.XS) || !estEntier(req.body.S) ||
 		!estEntier(req.body.M) || !estEntier(req.body.L) || !estEntier(req.body.XL)
 		|| !estEntier(req.body.XXL)){
@@ -94,8 +94,8 @@ function check_form_produit_sauf_img(req){
 
 function check_form_accessoire_sauf_img(req){
 	console.log("prix est" +req.body.prix);
-	console.log("prix 2 est fini "+!Number.isFinite(parseFloat(req.body.prix)));
-	if (req.body.libelle.length == 0 || !Number.isFinite(parseFloat(req.body.prix))){
+	console.log("prix 2 est fini "+!/^\d+(\.\d+)?$/.test(req.body.prix));
+	if (req.body.libelle.length == 0 || !/^\d+(\.\d+)?$/.test(req.body.prix)){
 		return false;
 	}else{
 		return true;
@@ -596,8 +596,8 @@ server.get("/gerant/produit/edit/:id", async (req, res) => {
 server.post("/gerant/produit/edit/:id", async (req, res) => {
 	const file = req.files.file;
 	let filename = file.path.substring(11);
-
 	if(check_form_produit_sauf_img(req)){
+		console.log("edit1");
 		if(req.files.file.size == 0){
 			filename = req.body.filename;
 		}
@@ -609,6 +609,7 @@ server.post("/gerant/produit/edit/:id", async (req, res) => {
 		res.redirect("/gerant/produit");
 
 	}else{
+		console.log("edit2");
 		const cat = await db.getCategories();
 		const scat = await db.getSousCategories();
 		const produit = await db.getProduit(parseInt(req.params.id));
@@ -618,7 +619,7 @@ server.post("/gerant/produit/edit/:id", async (req, res) => {
 			message : 'Formulaire incorrect',
 			produit : produit,
 			combi : false,
-			acc : true,
+			acc : false,
 			cat : cat,
 			error : 1,
 			scat : scat,
