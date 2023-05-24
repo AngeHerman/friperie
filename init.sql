@@ -24,7 +24,7 @@ CREATE TABLE cat_prod(
 CREATE TABLE scat_prod(
     nom_scat VARCHAR(30) PRIMARY KEY,
     nom_cat VARCHAR(30),
-    FOREIGN KEY (nom_cat) REFERENCES cat_prod(nom_cat)
+    FOREIGN KEY (nom_cat) REFERENCES cat_prod(nom_cat) ON DELETE CASCADE
 );
 
 CREATE TABLE taille(
@@ -38,14 +38,14 @@ CREATE TABLE produit(
     prix DECIMAL(10,2),
     nom_scat VARCHAR(30),
     img VARCHAR(100),
-    FOREIGN KEY (nom_scat) REFERENCES scat_prod(nom_scat)
+    FOREIGN KEY (nom_scat) REFERENCES scat_prod(nom_scat) ON DELETE CASCADE
 );
 
 CREATE TABLE taille_prod(
     taille VARCHAR(5),
     id_prod int,
     qte int,
-    FOREIGN KEY (taille) REFERENCES taille(taille),
+    FOREIGN KEY (taille) REFERENCES taille(taille) ON DELETE CASCADE,
     FOREIGN KEY (id_prod) REFERENCES produit(id_prod) ON DELETE CASCADE,
     PRIMARY KEY (id_prod,taille)
 
@@ -63,8 +63,8 @@ CREATE  TABLE accessoire(
 CREATE TABLE prod_acc(
     id_prod int,
     id_acc int,
-    FOREIGN KEY (id_prod) REFERENCES produit(id_prod),
-    FOREIGN KEY (id_acc) REFERENCES accessoire(id_acc),
+    FOREIGN KEY (id_prod) REFERENCES produit(id_prod) ON DELETE CASCADE,
+    FOREIGN KEY (id_acc) REFERENCES accessoire(id_acc) ON DELETE CASCADE,
     PRIMARY KEY (id_prod,id_acc)
 );
 
@@ -78,14 +78,14 @@ CREATE TABLE combinaison(
     nom_cat_combi VARCHAR(30),
     prix int,
     taille VARCHAR(5),
-    FOREIGN KEY (taille) REFERENCES taille(taille),
-    FOREIGN KEY (nom_cat_combi) REFERENCES cat_combi(nom_cat_combi)   
+    FOREIGN KEY (taille) REFERENCES taille(taille) ON DELETE CASCADE,
+    FOREIGN KEY (nom_cat_combi) REFERENCES cat_combi(nom_cat_combi) ON DELETE CASCADE 
 );
 
 CREATE TABLE produit_combi(
     id_prod int,
     id_combi int,
-    FOREIGN KEY (id_prod) REFERENCES produit(id_prod),
+    FOREIGN KEY (id_prod) REFERENCES produit(id_prod) ON DELETE CASCADE,
     FOREIGN KEY (id_combi) REFERENCES combinaison(id_combi) ON DELETE CASCADE,
     PRIMARY KEY (id_prod,id_combi)
 );
@@ -117,8 +117,8 @@ CREATE TABLE commandes(
 CREATE TABLE client_comm(
     id_cli int,
     id_comm int,
-    FOREIGN KEY (id_cli) REFERENCES client(id_cli),
-    FOREIGN KEY (id_comm) REFERENCES commandes(id_comm),
+    FOREIGN KEY (id_cli) REFERENCES client(id_cli) ON DELETE CASCADE,
+    FOREIGN KEY (id_comm) REFERENCES commandes(id_comm) ON DELETE CASCADE,
     PRIMARY KEY (id_cli,id_comm)
 );
 
@@ -128,9 +128,9 @@ CREATE TABLE comm_prod(
     qte int,
     taille VARCHAR(5),
     -- UNIQUE(id_prod,id_comm,taille),
-    FOREIGN KEY (taille) REFERENCES taille(taille),
-    FOREIGN KEY (id_prod) REFERENCES produit(id_prod),
-    FOREIGN KEY (id_comm) REFERENCES commandes(id_comm),
+    FOREIGN KEY (taille) REFERENCES taille(taille) ON DELETE CASCADE,
+    FOREIGN KEY (id_prod) REFERENCES produit(id_prod) ON DELETE CASCADE,
+    FOREIGN KEY (id_comm) REFERENCES commandes(id_comm) ON DELETE CASCADE,
     PRIMARY KEY (id_prod,id_comm,taille)
 );
 

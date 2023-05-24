@@ -2,6 +2,43 @@
 
 
 
+<div class="row" style="display: none;">
+  <div class="col-7">
+    <% if(combi){%>
+      <form action="/gerant/combinaisons/edit/<%= produit.id %>" method="post" enctype="multipart/form-data">
+    <%} else if(acc){%>
+      <form action="/gerant/accessoires/edit/<%= produit.id %>" method="post" enctype="multipart/form-data">
+    <%} else {%>
+      <form action="/gerant/produit/edit/<%= produit.id %>" method="post" enctype="multipart/form-data">
+    <%}%>
+      <div class="form-horizontal">
+
+        <%- include("editor.ejs") -%>
+
+        <div class="form-group row">
+          <label class="col-form-label col-sm-2"></label>
+          <div class="col-sm-10">
+            <input type="submit" value="Modifier" class="btn btn-default btn-warning" />
+            <% if (combi) {%> 
+              <a class="btn btn-outline-dark cancel" href="/gerant/combinaisons">Annuler</a>
+            <%} else if(acc) {%>
+              <a class="btn btn-outline-dark cancel" href="/gerant/accessoires">Annuler</a>
+            <%} else {%>
+              <a class="btn btn-outline-dark cancel" href="/gerant/produit">Annuler</a>
+            <%}%>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="col-5">
+      <img src="/img/<%= produit.img %>" alt="" 
+      style="max-width: 700px">
+  </div>
+
+</div>
+
+
 <div class="row">
   <div class="col-7">
     <% if(combi){%>

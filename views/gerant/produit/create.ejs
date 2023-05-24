@@ -8,7 +8,7 @@
 <%} else {%>
   <form action="/gerant/produit/create" method="post" enctype="multipart/form-data">
 <%}%>
-    <div class="form-horizontal">
+    <div class="form-horizontal" style="display: none;">
       <%- include("editor") -%>
       <div class="form-group row">
         <label class="col-form-label col-sm-2"></label>
@@ -25,4 +25,46 @@
       </div>
     </div>
 </form>
+
+<% if (combi) { %>
+  <form action="/gerant/combinaisons/create" method="post" enctype="multipart/form-data">
+    <div class="form-horizontal">
+      <%- include("editor") -%>
+      <div class="form-group row">
+        <label class="col-form-label col-sm-2"></label>
+        <div class="col-sm-10">
+          <input type="submit" value="Ajouter" class="btn btn-default btn-success" />
+            <a class="btn btn-outline-dark cancel" href="/gerant/combinaisons">Annuler</a>
+        </div>
+      </div>
+    </div>
+  </form>
+<% } else if (acc) { %>
+  <form action="/gerant/accessoires/create" method="post" enctype="multipart/form-data">
+    <div class="form-horizontal">
+      <%- include("editor") -%>
+      <div class="form-group row">
+        <label class="col-form-label col-sm-2"></label>
+        <div class="col-sm-10">
+          <input type="submit" value="Ajouter" class="btn btn-default btn-success" />
+            <a class="btn btn-outline-dark cancel" href="/gerant/accessoires">Annuler</a>
+        </div>
+      </div>
+    </div>
+  </form>
+<% } else { %>
+  <form action="/gerant/produit/create" method="post" enctype="multipart/form-data">
+    <div class="form-horizontal">
+      <%- include("editor") -%>
+      <div class="form-group row">
+        <label class="col-form-label col-sm-2"></label>
+        <div class="col-sm-10">
+          <input type="submit" value="Ajouter" class="btn btn-default btn-success" />
+            <a class="btn btn-outline-dark cancel" href="/gerant/produit">Annuler</a>
+        </div>
+      </div>
+    </div>
+  </form>
+<% } %>
+
 <%- include('../_footer.ejs') %>

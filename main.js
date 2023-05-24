@@ -808,6 +808,7 @@ server.post("/gerant/produit/create", async (req, res) => {
 
 		const cat = await db.getCategories();
 		const scat = await db.getSousCategories();
+		const accessoires = await db.get_accessoires();
 		let p = new Object;
 		p.categorie = req.body.categorie;
 		p.img = req.files.file.name;
@@ -821,7 +822,8 @@ server.post("/gerant/produit/create", async (req, res) => {
 			acc : false,
 			cat : cat,
 			scat : scat,
-			taille : [req.body.XXS,req.body.XS,req.body.S,req.body.M,req.body.L,req.body.XL,req.body.XXL]
+			taille : [req.body.XXS,req.body.XS,req.body.S,req.body.M,req.body.L,req.body.XL,req.body.XXL],
+			accessoires : accessoires
 		});
 		// res.redirect('back');
 	}

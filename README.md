@@ -15,7 +15,7 @@ Pour lancer le projet  il faut
     drop database if exists friperie;  
     CREATE DATABASE friperie;  
     \c friperie <psql_username> localhost 5432;
-- Creer les tables de la bases de données et les remplir en faisant un copie-coller du code du fichier bd.sql  
+- Creer les tables de la bases de données et les remplir en faisant un copie-coller du code du fichier init.sql  
 - Taper \q ou crtl + d pour quitter psql  
 - Lancer la commande : touch .env  
 - Remplir votre fichier .env qu'on vient de creer comme suit:  
@@ -33,5 +33,6 @@ Pour lancer le projet  il faut
         Cette dernière vous demandera d'entrer le mot de passe voulu  
     - Lancez : \q pour quitter
 - Retournez modifier  PG_PASSWORD= <psql_password> dans votre fichier .env
-## Lancer le script bd.sql
+## Lancer le script init.sql
+## node main.js pour lancer le serveur sur localhost::8080
 
