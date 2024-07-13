@@ -1,4 +1,4 @@
-# Friperie Web Boutique
+# Friperie
 
 Ce guide vous permettra de lancer le projet de la boutique web de friperie.
 
@@ -116,7 +116,7 @@ Assurez-vous d'avoir Node.js et PostgreSQL installés sur votre machine.
 Ce projet est sous la [GNU General Public License v3.0 (GPL v3)](LICENSE). Pour plus de détails, veuillez consulter le fichier `LICENSE` dans ce répertoire.
 
 ## Auteurs
-- **Ange Herman**
-- **Jasen Steeve**
+- **Ange Herman KOUE-HEMAZRO**
+- **Henri TRAN**
 
 ---
