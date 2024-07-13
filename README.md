@@ -1,38 +1,122 @@
-# friperie
-Pour lancer le projet  il faut
-- Installer d'abord les modules avec les commandes
+# Friperie Web Boutique
 
-    npm install express  
-    npm install ejs  
-    npm install pg  
-    npm install dotenv  
-    npm install express-session  
-    npm install body-parser  
-    npm install connect-multiparty  
-- Se connecter à psql avec votre nom d'utilisateur an lançant la commande  
-    psql -U <psql_username> -W postgres 
-- Creer la base de données en lançant les 3 commandes suivantes   
-    drop database if exists friperie;  
-    CREATE DATABASE friperie;  
+Ce guide vous permettra de lancer le projet de la boutique web de friperie.
+
+## Prérequis
+
+Assurez-vous d'avoir Node.js et PostgreSQL installés sur votre machine.
+
+## Installation
+
+1. **Installer les modules Node.js nécessaires :**
+
+    ```bash
+    npm install express ejs pg dotenv express-session body-parser connect-multiparty
+    ```
+
+2. **Se connecter à PostgreSQL :**
+
+    Ouvrez un terminal et connectez-vous à PostgreSQL avec votre nom d'utilisateur en lançant la commande suivante :
+
+    ```bash
+    psql -U <psql_username> -W postgres
+    ```
+
+3. **Créer la base de données :**
+
+    Exécutez les commandes suivantes dans PostgreSQL pour créer la base de données :
+
+    ```sql
+    DROP DATABASE IF EXISTS friperie;
+    CREATE DATABASE friperie;
     \c friperie <psql_username> localhost 5432;
-- Creer les tables de la bases de données et les remplir en faisant un copie-coller du code du fichier init.sql  
-- Taper \q ou crtl + d pour quitter psql  
-- Lancer la commande : touch .env  
-- Remplir votre fichier .env qu'on vient de creer comme suit:  
-    PG_HOST=localhost  
-    PG_PORT=5432  
-    PG_USER= <psql_username>  
-    PG_PASSWORD= <psql_password>   
-    PG_DATABASE=friperie  
-    SESSION_SECRET=1234567890abcdefghijklmnopqrstuvwxyzazerty  
+    ```
 
-- Si vous n'avez pas de mot de passe psql alors vous devez en créer comme suit sinon ça ne marchera pas 
-    - Lancez votre psql : psql
-    - Connectez vous à la base postgres: \connect postgres   
-    - Lancez : \password <sql_username>  
-        Cette dernière vous demandera d'entrer le mot de passe voulu  
-    - Lancez : \q pour quitter
-- Retournez modifier  PG_PASSWORD= <psql_password> dans votre fichier .env
-## Lancer le script init.sql
-## node main.js pour lancer le serveur sur localhost::8080
+4. **Créer les tables et les remplir :**
 
+    Copiez-collez le contenu du fichier `init.sql` pour créer et remplir les tables de la base de données.
+
+5. **Quitter PostgreSQL :**
+
+    Tapez `\q` ou appuyez sur `Ctrl + D` pour quitter PostgreSQL.
+
+6. **Configurer les variables d'environnement :**
+
+    Créez un fichier `.env` :
+
+    ```bash
+    touch .env
+    ```
+
+    Remplissez le fichier `.env` avec les informations suivantes :
+
+    ```plaintext
+    PG_HOST=localhost
+    PG_PORT=5432
+    PG_USER=<psql_username>
+    PG_PASSWORD=<psql_password>
+    PG_DATABASE=friperie
+    SESSION_SECRET=1234567890abcdefghijklmnopqrstuvwxyzazerty
+    ```
+
+7. **Si vous n'avez pas de mot de passe PostgreSQL :**
+
+    Si vous n'avez pas encore de mot de passe PostgreSQL, suivez ces étapes pour en créer un :
+
+    - Lancez PostgreSQL :
+
+      ```bash
+      psql
+      ```
+
+    - Connectez-vous à la base `postgres` :
+
+      ```sql
+      \connect postgres
+      ```
+
+    - Définissez le mot de passe pour l'utilisateur :
+
+      ```sql
+      \password <psql_username>
+      ```
+
+      Entrez le mot de passe souhaité lorsque demandé.
+
+    - Quittez PostgreSQL :
+
+      ```sql
+      \q
+      ```
+
+    - Mettez à jour le mot de passe dans votre fichier `.env` :
+
+      ```plaintext
+      PG_PASSWORD=<psql_password>
+      ```
+
+## Lancer le projet
+
+1. **Initialiser la base de données :**
+
+    Exécutez le script `init.sql` si ce n'est pas déjà fait.
+
+2. **Démarrer le serveur :**
+
+    Lancez le serveur avec la commande suivante :
+
+    ```bash
+    node main.js
+    ```
+
+    Le serveur sera accessible sur `localhost:8080`.
+
+## Licence
+
+Ce projet est sous la [GNU General Public License v3.0 (GPL v3)](LICENSE). Pour plus de détails, veuillez consulter le fichier `LICENSE` dans ce répertoire.
+
+## Auteurs
+- **Ange Herman**
+- **Jasen Steeve**
+
+---
